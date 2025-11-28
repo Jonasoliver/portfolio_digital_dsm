@@ -1,41 +1,331 @@
 {% extends 'base.html' %}
 
 {% block title %}
-Contatos
+Home - JMO Portfolio
 {% endblock %}
 
 {% block content %}
-<br>
-<div class="container text-center">
-    <h1 class="fw-bold text-dark">Sobre este Portfólio:</h1>
-    <p class="text-muted mb-5">Este portfólio apresentará quem sou eu, e quais são os trabalhos que já realizei, sejam acadêmicos, sejam profissionais. Também o que eu gosto de fazer, além de mostrar alguns projetos de APIs que foram desenvolvidos ao longo dos semestres.</p>
+<style>
+    /* Hero Section */
+    .hero-section {
+        min-height: 90vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        overflow: hidden;
+        padding: 60px 20px;
+    }
 
-    <h2 class="fw-bold text-dark">Ferramentas utilizadas:</h2>
-</div>
+    .hero-content {
+        text-align: center;
+        z-index: 2;
+        animation: fadeInUp 1s ease-out;
+    }
 
-<br>
+    .hero-title {
+        font-size: clamp(2.5rem, 8vw, 5rem);
+        font-weight: 800;
+        margin-bottom: 20px;
+        line-height: 1.1;
+    }
 
-<div class="container mt-4">
-    <div class="row text-center">
-        <div class="col-6 col-md-3 mb-4">
-            <h4 class="fw-bold text-dark">CSS</h4>
-            <img src="../static/css.png" alt="Imagem CSS" class="img-fluid mb-2" style="max-width: 80px;">
-        </div>
-        <div class="col-6 col-md-3 mb-4">
-            <h4 class="fw-bold text-dark">HTML</h4>
-            <img src="../static/html.png" alt="Imagem HTML" class="img-fluid mb-2" style="max-width: 80px;">
-        </div>
-        <div class="col-6 col-md-3 mb-4">
-            <h4 class="fw-bold text-dark">FLASK</h4>
-            <img src="../static/flask.png" alt="Imagem Flask" class="img-fluid mb-2" style="max-width: 80px;">
-        </div>
-        <div class="col-6 col-md-3 mb-4">
-            <h4 class="fw-bold text-dark">PYTHON</h4>
-            <img src="../static/python.png" alt="Imagem Python" class="img-fluid mb-2" style="max-width: 80px;">
+    .hero-subtitle {
+        font-size: clamp(1.2rem, 3vw, 1.8rem);
+        color: var(--text-secondary);
+        margin-bottom: 40px;
+        font-weight: 400;
+    }
+
+    .typing-effect {
+        display: inline-block;
+        border-right: 3px solid var(--accent-1);
+        animation: blink 0.7s step-end infinite;
+    }
+
+    @keyframes blink {
+        50% { border-color: transparent; }
+    }
+
+    /* Ferramentas Section */
+    .tools-section {
+        padding: 100px 20px;
+        background: linear-gradient(180deg, transparent 0%, rgba(17, 17, 17, 0.5) 100%);
+    }
+
+    .section-title {
+        text-align: center;
+        font-size: clamp(2rem, 5vw, 3rem);
+        font-weight: 700;
+        margin-bottom: 20px;
+    }
+
+    .section-subtitle {
+        text-align: center;
+        font-size: clamp(1rem, 2vw, 1.2rem);
+        color: var(--text-secondary);
+        margin-bottom: 60px;
+        max-width: 700px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .tool-card {
+        background: rgba(255, 255, 255, 0.03);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 24px;
+        padding: 40px 30px;
+        text-align: center;
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        position: relative;
+        overflow: hidden;
+        height: 100%;
+    }
+
+    .tool-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 3px;
+        background: linear-gradient(90deg, var(--accent-1), var(--accent-2));
+        transform: scaleX(0);
+        transition: transform 0.4s ease;
+    }
+
+    .tool-card:hover::before {
+        transform: scaleX(1);
+    }
+
+    .tool-card:hover {
+        background: rgba(255, 255, 255, 0.06);
+        border-color: rgba(0, 212, 255, 0.3);
+        transform: translateY(-10px);
+        box-shadow: 0 20px 50px rgba(0, 212, 255, 0.2);
+    }
+
+    .tool-icon-wrapper {
+        width: 100px;
+        height: 100px;
+        margin: 0 auto 25px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: 20px;
+        transition: all 0.4s ease;
+        position: relative;
+    }
+
+    .tool-card:hover .tool-icon-wrapper {
+        background: rgba(0, 212, 255, 0.1);
+        transform: rotateY(360deg);
+    }
+
+    .tool-icon-wrapper img {
+        max-width: 60px;
+        height: auto;
+        filter: drop-shadow(0 5px 15px rgba(0, 212, 255, 0.3));
+        transition: all 0.4s ease;
+    }
+
+    .tool-card:hover .tool-icon-wrapper img {
+        filter: drop-shadow(0 10px 25px rgba(0, 212, 255, 0.5));
+        transform: scale(1.1);
+    }
+
+    .tool-name {
+        font-size: 1.3rem;
+        font-weight: 600;
+        color: var(--text-primary);
+        margin-top: 10px;
+        font-family: 'JetBrains Mono', monospace;
+    }
+
+    /* CTA Buttons */
+    .cta-buttons {
+        display: flex;
+        gap: 20px;
+        justify-content: center;
+        flex-wrap: wrap;
+        margin-top: 40px;
+    }
+
+    .btn-primary-custom {
+        padding: 15px 40px;
+        background: linear-gradient(135deg, #00d4ff, #8b5cf6);
+        color: white;
+        border: none;
+        border-radius: 50px;
+        font-weight: 600;
+        font-size: 1.1rem;
+        text-decoration: none;
+        display: inline-block;
+        position: relative;
+        overflow: hidden;
+        transition: all 0.3s ease;
+        box-shadow: 0 10px 30px rgba(0, 212, 255, 0.3);
+    }
+
+    .btn-primary-custom:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 15px 40px rgba(0, 212, 255, 0.5);
+        color: white;
+    }
+
+    .btn-secondary-custom {
+        padding: 15px 40px;
+        background: transparent;
+        color: var(--accent-1);
+        border: 2px solid var(--accent-1);
+        border-radius: 50px;
+        font-weight: 600;
+        font-size: 1.1rem;
+        text-decoration: none;
+        display: inline-block;
+        transition: all 0.3s ease;
+    }
+
+    .btn-secondary-custom:hover {
+        background: rgba(0, 212, 255, 0.1);
+        transform: translateY(-3px);
+        box-shadow: 0 10px 30px rgba(0, 212, 255, 0.2);
+        color: var(--accent-1);
+    }
+
+    /* Floating animation */
+    @keyframes float {
+        0%, 100% { transform: translateY(0px); }
+        50% { transform: translateY(-20px); }
+    }
+
+    .floating {
+        animation: float 3s ease-in-out infinite;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+        .hero-section {
+            min-height: 80vh;
+        }
+
+        .tools-section {
+            padding: 60px 20px;
+        }
+
+        .cta-buttons {
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .btn-primary-custom,
+        .btn-secondary-custom {
+            width: 100%;
+            max-width: 300px;
+        }
+    }
+</style>
+
+<!-- Hero Section -->
+<div class="hero-section">
+    <div class="hero-content">
+        <h1 class="hero-title gradient-text">
+            Jonas Miguel Oliveira
+        </h1>
+        <p class="hero-subtitle">
+            <span class="typing-effect">Desenvolvedor Full Stack</span>
+        </p>
+        <p style="color: var(--text-secondary); font-size: 1.1rem; max-width: 600px; margin: 0 auto 30px;">
+            Transformando ideias em código. Especializado em criar experiências digitais inovadoras e funcionais.
+        </p>
+        <div class="cta-buttons">
+            <a href="/trabalhos" class="btn-primary-custom">Ver Projetos</a>
+            <a href="/sobremim" class="btn-secondary-custom">Sobre Mim</a>
         </div>
     </div>
 </div>
 
-<br>
+<!-- Ferramentas Section -->
+<div class="tools-section">
+    <div class="container">
+        <h2 class="section-title gradient-text">Stack Tecnológico</h2>
+        <p class="section-subtitle">
+            Ferramentas e tecnologias que utilizo para desenvolver soluções completas e escaláveis
+        </p>
+        
+        <div class="row g-4">
+            <div class="col-12 col-sm-6 col-lg-3">
+                <div class="tool-card">
+                    <div class="tool-icon-wrapper floating">
+                        <img src="../static/python.png" alt="Python">
+                    </div>
+                    <h4 class="tool-name">PYTHON</h4>
+                </div>
+            </div>
+            
+            <div class="col-12 col-sm-6 col-lg-3">
+                <div class="tool-card">
+                    <div class="tool-icon-wrapper floating" style="animation-delay: 0.2s;">
+                        <img src="../static/flask.png" alt="Flask">
+                    </div>
+                    <h4 class="tool-name">FLASK</h4>
+                </div>
+            </div>
+            
+            <div class="col-12 col-sm-6 col-lg-3">
+                <div class="tool-card">
+                    <div class="tool-icon-wrapper floating" style="animation-delay: 0.4s;">
+                        <img src="../static/html.png" alt="HTML">
+                    </div>
+                    <h4 class="tool-name">HTML5</h4>
+                </div>
+            </div>
+            
+            <div class="col-12 col-sm-6 col-lg-3">
+                <div class="tool-card">
+                    <div class="tool-icon-wrapper floating" style="animation-delay: 0.6s;">
+                        <img src="../static/css.png" alt="CSS">
+                    </div>
+                    <h4 class="tool-name">CSS3</h4>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Efeito de digitação
+    const typingText = document.querySelector('.typing-effect');
+    const texts = ['Desenvolvedor Full Stack', 'Criador de Soluções', 'Estudante DSM'];
+    let textIndex = 0;
+    let charIndex = 0;
+    let isDeleting = false;
+
+    function typeEffect() {
+        const currentText = texts[textIndex];
+        
+        if (isDeleting) {
+            typingText.textContent = currentText.substring(0, charIndex - 1);
+            charIndex--;
+        } else {
+            typingText.textContent = currentText.substring(0, charIndex + 1);
+            charIndex++;
+        }
+
+        if (!isDeleting && charIndex === currentText.length) {
+            setTimeout(() => isDeleting = true, 2000);
+        } else if (isDeleting && charIndex === 0) {
+            isDeleting = false;
+            textIndex = (textIndex + 1) % texts.length;
+        }
+
+        const speed = isDeleting ? 50 : 100;
+        setTimeout(typeEffect, speed);
+    }
+
+    typeEffect();
+</script>
 
 {% endblock %}

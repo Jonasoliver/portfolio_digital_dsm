@@ -1,220 +1,313 @@
 {% extends 'base.html' %}
 
 {% block title %}
-    Sobre Mim - Efeitos Cinemáticos
+    Sobre Mim - Jonas Miguel
 {% endblock %}
 
 {% block content %}
     <style>
-        /* Importando fontes do Google */
-        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
-
-        body {
-            font-family: 'Poppins', sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f4f4f4;
-            overflow-x: hidden;
-            box-sizing: border-box;
-        }
-
         /* Container principal */
-        .main-container {
+        .about-container {
             max-width: 1200px;
             margin: 0 auto;
-            padding: 40px;
-            background-color: #fff;
-            border-radius: 12px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-            opacity: 0;
-            transform: translateY(100px);
-            animation: fadeInUp 1s forwards 0.5s;
+            padding: 40px 20px 80px;
         }
 
-        /* Títulos principais e subtítulos */
+        /* Título principal */
         .main-title {
             text-align: center;
-            font-size: 3rem;
-            font-weight: 600;
-            color: #222;
-            margin-bottom: 40px;
-            opacity: 0;
-            animation: fadeIn 1.5s forwards;
-            animation-delay: 0.3s;
+            font-size: clamp(2.5rem, 6vw, 4rem);
+            font-weight: 800;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, #00d4ff, #8b5cf6, #ec4899);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: fadeInUp 0.8s ease-out;
         }
 
-        h2 {
-            font-size: 2rem;
-            font-weight: 600;
-            color: #444;
-            margin-bottom: 20px;
-        }
-
-        p {
-            font-size: 1rem;
-            color: #666;
-            line-height: 1.6;
-            margin-bottom: 20px;
+        .main-subtitle {
+            text-align: center;
+            color: var(--text-secondary);
+            font-size: clamp(1rem, 2vw, 1.2rem);
+            margin-bottom: 60px;
+            animation: fadeInUp 1s ease-out;
         }
 
         /* Seções do conteúdo */
-        .section {
-            display: flex;
-            flex-direction: row;
-            margin-bottom: 60px;
+        .about-section {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            margin-bottom: 80px;
             align-items: center;
-            justify-content: center;
-            gap: 40px;
             opacity: 0;
-            transform: translateX(-100%);
-            animation: slideInFromLeft 1s forwards;
+            animation: fadeInUp 0.8s ease-out forwards;
         }
 
-        .section-text {
-            max-width: 600px;
+        .about-section:nth-child(even) {
+            direction: rtl;
+        }
+
+        .about-section:nth-child(even) > * {
+            direction: ltr;
+        }
+
+        .section-content {
             padding: 20px;
         }
 
-        .section img {
-            width: 220px;
-            height: 220px;
-            border-radius: 50%;
-            object-fit: cover;
-            box-shadow: 0 6px 30px rgba(0, 0, 0, 0.2);
+        .section-title {
+            font-size: clamp(1.8rem, 4vw, 2.5rem);
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: var(--text-primary);
+            position: relative;
+            display: inline-block;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 0;
+            width: 60px;
+            height: 4px;
+            background: linear-gradient(90deg, var(--accent-1), var(--accent-2));
+            border-radius: 2px;
+        }
+
+        .section-text {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: var(--text-secondary);
+            margin-top: 25px;
+        }
+
+        /* Imagens com efeito avançado */
+        .image-wrapper {
+            position: relative;
+            border-radius: 30px;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .image-wrapper::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(0, 212, 255, 0.3), rgba(139, 92, 246, 0.3));
             opacity: 0;
-            animation: fadeInImage 1.5s forwards;
-            animation-delay: 0.6s;
+            transition: opacity 0.5s ease;
+            z-index: 2;
         }
 
-        /* Efeitos de transição nas imagens */
-        .section img:hover {
-            transform: scale(1.1);
-            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
-            transition: all 0.4s ease-in-out;
+        .image-wrapper:hover::before {
+            opacity: 1;
         }
 
-        /* Efeitos para o texto das seções */
-        .section-text h2 {
-            font-size: 1.8rem;
-            color: #222;
+        .image-wrapper::after {
+            content: '';
+            position: absolute;
+            inset: -2px;
+            background: linear-gradient(135deg, var(--accent-1), var(--accent-2), var(--accent-3));
+            border-radius: 30px;
+            z-index: -1;
+            opacity: 0;
+            transition: opacity 0.5s ease;
         }
 
-        .section-text p {
-            font-size: 1rem;
-            color: #555;
+        .image-wrapper:hover::after {
+            opacity: 1;
         }
 
-        /* Linha de separação */
-        .separator {
+        .image-wrapper:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 30px 80px rgba(0, 212, 255, 0.4);
+        }
+
+        .about-image {
             width: 100%;
-            height: 2px;
-            background-color: #ddd;
-            margin: 40px 0;
+            height: 400px;
+            object-fit: cover;
+            display: block;
+            transition: all 0.5s ease;
+            position: relative;
+            z-index: 1;
         }
 
-        /* Animações */
-        @keyframes fadeIn {
-            0% {
-                opacity: 0;
-            }
-            100% {
-                opacity: 1;
-            }
+        .image-wrapper:hover .about-image {
+            transform: scale(1.05);
         }
 
-        @keyframes fadeInUp {
-            0% {
-                opacity: 0;
-                transform: translateY(50px);
-            }
-            100% {
-                opacity: 1;
-                transform: translateY(0);
-            }
+        /* Cards de stats */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-top: 40px;
         }
 
-        @keyframes slideInFromLeft {
-            0% {
-                opacity: 0;
-                transform: translateX(-100%);
-            }
-            100% {
-                opacity: 1;
-                transform: translateX(0);
-            }
-        }
-
-        @keyframes fadeInImage {
-            0% {
-                opacity: 0;
-            }
-            100% {
-                opacity: 1;
-            }
-        }
-
-        /* Footer */
-        footer {
+        .stat-card {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 30px 20px;
             text-align: center;
-            margin-top: 80px;
-            font-size: 0.9rem;
-            color: #999;
-            animation: fadeIn 1.5s forwards;
-            animation-delay: 1s;
+            transition: all 0.3s ease;
         }
+
+        .stat-card:hover {
+            background: rgba(255, 255, 255, 0.06);
+            border-color: rgba(0, 212, 255, 0.3);
+            transform: translateY(-5px);
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--accent-1), var(--accent-2));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .stat-label {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin-top: 5px;
+        }
+
+        /* Linha decorativa */
+        .divider {
+            width: 100%;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            margin: 60px 0;
+        }
+
+        /* Responsive */
+        @media (max-width: 992px) {
+            .about-section {
+                grid-template-columns: 1fr;
+                gap: 40px;
+            }
+
+            .about-section:nth-child(even) {
+                direction: ltr;
+            }
+
+            .about-image {
+                height: 300px;
+            }
+        }
+
+        /* Animação de delay para seções */
+        .about-section:nth-child(1) { animation-delay: 0.2s; }
+        .about-section:nth-child(2) { animation-delay: 0.4s; }
+        .about-section:nth-child(3) { animation-delay: 0.6s; }
+        .about-section:nth-child(4) { animation-delay: 0.8s; }
     </style>
 
-    <!-- Conteúdo principal -->
-    <div class="main-container">
+    <div class="about-container">
         <h1 class="main-title">Sobre Mim</h1>
+        <p class="main-subtitle">
+            Desenvolvedor, Aventureiro e Apaixonado por Cultura
+        </p>
 
         <!-- Seção 1: Introdução -->
-        <div class="section">
-            <div class="section-text">
-                <h2>Quem sou eu?</h2>
-                <p>Olá, eu sou Jonas Miguel de Oliveira, um jovem desenvolvedor apaixonado por tecnologia e com uma forte afinidade com a natureza e cultura. Atualmente, estou cursando o terceiro semestre de Desenvolvimento de Software Multiplataforma na Fatec Jessen Vidal, em São José dos Campos. Sou um brasileiro de 20 anos, e no meu tempo livre, além de programar, gosto de me aventurar em atividades como andar de bike, tocar viola caipira e explorar igrejas históricas. Vamos descobrir mais sobre essas paixões?</p>
+        <div class="about-section">
+            <div class="section-content">
+                <h2 class="section-title">Quem sou eu?</h2>
+                <p class="section-text">
+                    Olá! Sou Jonas Miguel de Oliveira, desenvolvedor de 20 anos apaixonado por tecnologia e cultura. 
+                    Atualmente no terceiro semestre de Desenvolvimento de Software Multiplataforma na Fatec Jessen Vidal, 
+                    em São José dos Campos. Minha missão é transformar ideias em soluções digitais inovadoras.
+                </p>
+                <p class="section-text">
+                    Além do código, encontro inspiração na natureza, na música e na história. Cada linha de código que 
+                    escrevo carrega um pouco dessas paixões que moldam quem eu sou.
+                </p>
+                
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-number">20</div>
+                        <div class="stat-label">Anos</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">3º</div>
+                        <div class="stat-label">Semestre DSM</div>
+                    </div>
+                </div>
             </div>
-            <div class="section-image">
-                <img src="../static/eu.jpg" alt="Minha foto">
-            </div>
-        </div>
-
-        <div class="separator"></div>
-
-        <!-- Seção 2: Andar de Bike -->
-        <div class="section">
-            <div class="section-text">
-                <h2>Andar de Bike</h2>
-                <p>A paixão por fazer trilhas de bike está entre as minhas atividades favoritas. Cada novo caminho que percorro, cada curva na estrada, é uma oportunidade de me conectar com a natureza e de explorar o mundo ao meu redor de uma forma única.</p>
-            </div>
-            <div class="section-image">
-                <img src="../static/bike.jpg" alt="Andar de Bike">
-            </div>
-        </div>
-
-        <div class="separator"></div>
-
-        <!-- Seção 3: Tocar Viola Caipira -->
-        <div class="section">
-            <div class="section-text">
-                <h2>Tocar Viola Caipira</h2>
-                <p>A música sempre esteve presente na minha vida. O violão foi minha porta de entrada para o universo musical, mas a viola caipira é o instrumento que realmente me encanta, pela sua história e pelas melodias que carrego comigo, uma verdadeira paixão familiar.</p>
-            </div>
-            <div class="section-image">
-                <img src="../static/viola.jpg" alt="Tocar Viola Caipira">
+            <div class="image-wrapper">
+                <img src="../static/eu.jpg" alt="Jonas Miguel" class="about-image">
             </div>
         </div>
 
-        <div class="separator"></div>
+        <div class="divider"></div>
 
-        <!-- Seção 4: Igrejas Pré-conciliares -->
-        <div class="section">
-            <div class="section-text">
-                <h2>Conhecer Igrejas Pré-conciliares</h2>
-                <p>Uma das minhas paixões é explorar igrejas pré-conciliares, com suas arquiteturas imponentes e ricas em história. Cada igreja tem uma história única, com vitrais e pinturas que narram a jornada religiosa e espiritual ao longo do tempo.</p>
+        <!-- Seção 2: Bike -->
+        <div class="about-section">
+            <div class="section-content">
+                <h2 class="section-title">Aventuras de Bike</h2>
+                <p class="section-text">
+                    As trilhas de bike são minha forma de conectar com a natureza e desafiar limites. Cada pedalada 
+                    é uma oportunidade de explorar novos caminhos, descobrir paisagens incríveis e encontrar aquela 
+                    paz que só a natureza proporciona.
+                </p>
+                <p class="section-text">
+                    A adrenalina das descidas, a superação nas subidas - tudo isso me ensina sobre persistência e 
+                    determinação, qualidades que levo para minha vida profissional.
+                </p>
             </div>
-            <div class="section-image">
-                <img src="../static/igreja.jpg" alt="Igrejas Pré-conciliares">
+            <div class="image-wrapper">
+                <img src="../static/bike.jpg" alt="Trilha de Bike" class="about-image">
+            </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <!-- Seção 3: Viola -->
+        <div class="about-section">
+            <div class="section-content">
+                <h2 class="section-title">Música na Alma</h2>
+                <p class="section-text">
+                    A música sempre foi parte essencial da minha vida. Comecei no violão, mas foi a viola caipira que 
+                    conquistou meu coração. Cada acorde conta uma história, cada melodia carrega tradição e emoção.
+                </p>
+                <p class="section-text">
+                    Tocar viola caipira é preservar cultura, é honrar raízes. É uma paixão que compartilho com minha 
+                    família e que me conecta com nossas tradições mais profundas.
+                </p>
+            </div>
+            <div class="image-wrapper">
+                <img src="../static/viola.jpg" alt="Viola Caipira" class="about-image">
+            </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <!-- Seção 4: Igrejas -->
+        <div class="about-section">
+            <div class="section-content">
+                <h2 class="section-title">História e Arquitetura</h2>
+                <p class="section-text">
+                    Explorar igrejas pré-conciliares é mergulhar na história viva. A arquitetura imponente, os vitrais 
+                    coloridos, as pinturas que narram séculos de fé e arte - tudo isso me fascina profundamente.
+                </p>
+                <p class="section-text">
+                    Cada igreja tem sua própria narrativa, sua essência única. Essa apreciação pela história e pelos 
+                    detalhes se reflete no meu trabalho, onde busco criar experiências significativas e memoráveis.
+                </p>
+            </div>
+            <div class="image-wrapper">
+                <img src="../static/igreja.jpg" alt="Igreja Histórica" class="about-image">
             </div>
         </div>
     </div>

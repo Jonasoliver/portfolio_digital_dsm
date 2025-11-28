@@ -1,57 +1,327 @@
 {% extends 'base.html' %}
 
 {% block title %}
-    Trabalhos Realizados
+    Trabalhos Realizados - Jonas Miguel
 {% endblock %}
 
 {% block content %}
-    <div class="container mt-5 text-center">
-        <h1 class="display-4 text-dark">Trabalhos Realizados</h1>
-        <p class="lead text-muted">Aqui estão alguns dos projetos que desenvolvi, tanto de forma individual quanto em grupo, durante minha jornada acadêmica.</p>
+<style>
+    /* Container principal */
+    .projects-container {
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 40px 20px 80px;
+    }
+
+    /* Header da página */
+    .projects-header {
+        text-align: center;
+        margin-bottom: 80px;
+        animation: fadeInUp 0.8s ease-out;
+    }
+
+    .projects-title {
+        font-size: clamp(2.5rem, 6vw, 4rem);
+        font-weight: 800;
+        margin-bottom: 20px;
+        background: linear-gradient(135deg, #00d4ff, #8b5cf6, #ec4899);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+
+    .projects-subtitle {
+        font-size: clamp(1rem, 2vw, 1.2rem);
+        color: var(--text-secondary);
+        max-width: 700px;
+        margin: 0 auto;
+    }
+
+    /* Card de projeto */
+    .project-card {
+        background: rgba(255, 255, 255, 0.03);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 30px;
+        padding: 0;
+        margin-bottom: 60px;
+        overflow: hidden;
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        opacity: 0;
+        animation: fadeInUp 0.8s ease-out forwards;
+    }
+
+    .project-card:hover {
+        background: rgba(255, 255, 255, 0.05);
+        border-color: rgba(0, 212, 255, 0.3);
+        transform: translateY(-10px);
+        box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5);
+    }
+
+    /* Imagem do projeto */
+    .project-image-wrapper {
+        position: relative;
+        width: 100%;
+        height: 400px;
+        overflow: hidden;
+        border-radius: 30px 30px 0 0;
+    }
+
+    .project-image {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        filter: brightness(0.8);
+    }
+
+    .project-card:hover .project-image {
+        transform: scale(1.1);
+        filter: brightness(1);
+    }
+
+    .project-image-wrapper::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(180deg, transparent 0%, rgba(10, 10, 10, 0.8) 100%);
+        pointer-events: none;
+    }
+
+    /* Conteúdo do projeto */
+    .project-content {
+        padding: 40px;
+    }
+
+    .project-title {
+        font-size: clamp(1.8rem, 4vw, 2.5rem);
+        font-weight: 700;
+        color: var(--text-primary);
+        margin-bottom: 15px;
+        position: relative;
+        display: inline-block;
+    }
+
+    .project-title::after {
+        content: '';
+        position: absolute;
+        bottom: -8px;
+        left: 0;
+        width: 80px;
+        height: 4px;
+        background: linear-gradient(90deg, var(--accent-1), var(--accent-2));
+        border-radius: 2px;
+    }
+
+    .project-description {
+        font-size: 1.1rem;
+        color: var(--text-secondary);
+        line-height: 1.8;
+        margin-bottom: 30px;
+    }
+
+    /* Grid de informações */
+    .project-info-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 30px;
+        margin-top: 30px;
+    }
+
+    .info-block {
+        background: rgba(255, 255, 255, 0.02);
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        border-radius: 15px;
+        padding: 20px;
+        transition: all 0.3s ease;
+    }
+
+    .info-block:hover {
+        background: rgba(255, 255, 255, 0.04);
+        border-color: rgba(0, 212, 255, 0.2);
+        transform: translateY(-3px);
+    }
+
+    .info-label {
+        font-size: 0.85rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        color: var(--accent-1);
+        margin-bottom: 10px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .info-label::before {
+        content: '';
+        width: 6px;
+        height: 6px;
+        background: var(--accent-1);
+        border-radius: 50%;
+        display: inline-block;
+    }
+
+    .info-content {
+        font-size: 1rem;
+        color: var(--text-secondary);
+        line-height: 1.6;
+    }
+
+    /* Tags de tecnologias */
+    .tech-tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-top: 10px;
+    }
+
+    .tech-tag {
+        padding: 8px 16px;
+        background: rgba(0, 212, 255, 0.1);
+        color: var(--accent-1);
+        border: 1px solid rgba(0, 212, 255, 0.3);
+        border-radius: 20px;
+        font-size: 0.85rem;
+        font-weight: 500;
+        transition: all 0.3s ease;
+    }
+
+    .tech-tag:hover {
+        background: rgba(0, 212, 255, 0.2);
+        border-color: var(--accent-1);
+        transform: translateY(-2px);
+    }
+
+    /* Divider entre projetos */
+    .project-divider {
+        height: 2px;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+        margin: 80px 0;
+    }
+
+    /* Animações em delay */
+    .project-card:nth-child(1) { animation-delay: 0.1s; }
+    .project-card:nth-child(2) { animation-delay: 0.2s; }
+    .project-card:nth-child(3) { animation-delay: 0.3s; }
+    .project-card:nth-child(4) { animation-delay: 0.4s; }
+    .project-card:nth-child(5) { animation-delay: 0.5s; }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+        .project-content {
+            padding: 30px 20px;
+        }
+
+        .project-image-wrapper {
+            height: 250px;
+        }
+
+        .project-info-grid {
+            grid-template-columns: 1fr;
+            gap: 20px;
+        }
+    }
+
+    /* Badge de destaque */
+    .featured-badge {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        background: linear-gradient(135deg, var(--accent-1), var(--accent-2));
+        color: white;
+        padding: 8px 20px;
+        border-radius: 20px;
+        font-size: 0.85rem;
+        font-weight: 600;
+        z-index: 10;
+        box-shadow: 0 5px 15px rgba(0, 212, 255, 0.4);
+    }
+</style>
+
+<div class="projects-container">
+    <!-- Header -->
+    <div class="projects-header">
+        <h1 class="projects-title">Meus Trabalhos</h1>
+        <p class="projects-subtitle">
+            Projetos desenvolvidos ao longo da minha jornada acadêmica e profissional, 
+            transformando ideias em soluções funcionais
+        </p>
     </div>
 
+    <!-- Projetos -->
     {% for trabalho in trabalhos %}
-        <div class="container mt-5">
-            <div class="row">
-                <div class="col-12">
-                    <!-- Título do Trabalho -->
-                    <h3 class="text-primary font-weight-bold">{{ trabalho['titulo'] }}</h3>
-                    <p class="text-muted mb-4">{{ trabalho['descricao'] }}</p>
-
-                    <!-- Informações Tecnologias e Contribuições -->
-                    <div class="row text-left">
-                        <div class="col-md-6">
-                            <h5 class="font-weight-bold text-dark">Tecnologias:</h5>
-                            <p class="text-secondary">{{ trabalho['tecno'] }}</p>
-                        </div>
-                        <div class="col-md-6">
-                            <h5 class="font-weight-bold text-dark">{{ trabalho['contribuicao'] }}:</h5>
-                            <p class="text-secondary">{{ trabalho['cont'] }}</p>
-                        </div>
-                    </div>
-
-                    <!-- Informações de Hard e Soft Skills -->
-                    <div class="row text-left mt-4">
-                        <div class="col-md-6">
-                            <h5 class="font-weight-bold text-dark">Hard Skills:</h5>
-                            <p class="text-secondary">{{ trabalho['hardD'] }}</p>
-                        </div>
-                        <div class="col-md-6">
-                            <h5 class="font-weight-bold text-dark">Soft Skills:</h5>
-                            <p class="text-secondary">{{ trabalho['so'] }}</p>
-                        </div>
-                    </div>
-
-                    <!-- Imagem do Trabalho (com tamanho ajustado) -->
-                    <div class="mt-4">
-                        <img src="{{ trabalho['imagem'] }}" alt="Imagem do Trabalho" class="img-fluid rounded shadow-sm mx-auto d-block" style="max-width: 60%; height: auto;">
+    <div class="project-card">
+        <div class="project-image-wrapper">
+            {% if loop.first %}
+            <div class="featured-badge">✨ Destaque</div>
+            {% endif %}
+            <img src="{{ trabalho['imagem'] }}" alt="{{ trabalho['titulo'] }}" class="project-image">
+        </div>
+        
+        <div class="project-content">
+            <h3 class="project-title">{{ trabalho['titulo'] }}</h3>
+            <p class="project-description">{{ trabalho['descricao'] }}</p>
+            
+            <div class="project-info-grid">
+                <div class="info-block">
+                    <div class="info-label">Tecnologias</div>
+                    <div class="tech-tags">
+                        {% for tech in trabalho['tecno'].split(',') %}
+                        <span class="tech-tag">{{ tech.strip() }}</span>
+                        {% endfor %}
                     </div>
                 </div>
+                
+                <div class="info-block">
+                    <div class="info-label">{{ trabalho['contribuicao'] }}</div>
+                    <div class="info-content">{{ trabalho['cont'] }}</div>
+                </div>
+                
+                <div class="info-block">
+                    <div class="info-label">Hard Skills</div>
+                    <div class="info-content">{{ trabalho['hardD'] }}</div>
+                </div>
+                
+                <div class="info-block">
+                    <div class="info-label">Soft Skills</div>
+                    <div class="info-content">{{ trabalho['so'] }}</div>
+                </div>
             </div>
-
-            <!-- Linha de Separação entre os Projetos -->
-            <hr class="my-5">
-
         </div>
+    </div>
+    
+    {% if not loop.last %}
+    <div class="project-divider"></div>
+    {% endif %}
     {% endfor %}
+</div>
+
+<script>
+    // Adicionar animação de scroll reveal
+    const projectCards = document.querySelectorAll('.project-card');
+    
+    const observerOptions = {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
+    };
+    
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.style.opacity = '1';
+                entry.target.style.transform = 'translateY(0)';
+            }
+        });
+    }, observerOptions);
+    
+    projectCards.forEach(card => {
+        observer.observe(card);
+    });
+</script>
+
 {% endblock %}

@@ -45,6 +45,34 @@ trabalhos = [
         'so': 'Responsabilidade e foco em resultados. A criação de um portal de transparência exigiu uma grande atenção aos detalhes e a capacidade de assumir responsabilidades para garantir que as informações fossem apresentadas de forma clara, precisa e segura. No entanto, ao lidar com dados sensíveis e interações com o cliente, enfrentamos desafios inesperados relacionados à privacidade e segurança das informações. Isso me obrigou a desenvolver habilidades de comunicação assertiva, tanto para explicar o que poderia ser feito dentro dos limites de segurança quanto para negociar com a equipe sobre quais dados poderiam ser expostos ou não. Essa experiência de negociação de segurança de dados, embora não planejada, foi fundamental para meu desenvolvimento profissional.',
         'imagem': '../static/projeto3dsm.png'
     },
+
+    {
+        'titulo': 'Projeto API 4DSM primeiro semestre de 2025',
+        'descricao': 'Desenvolvido por alunos do 4º semestre de Desenvolvimento de Software Multiplataforma para o API, este projeto visa a coleta e processamento de dados de Estações Meteorológicas. O sistema permite inserção e busca de dados, além da exibição de estatísticas em gráficos interativos. A iniciativa atende à demanda da Tecsus para o monitoramento ambiental, utilizando sensores de baixo custo para medir vento, chuva, umidade, temperatura e pressão. Os dados são transmitidos para um servidor e exibidos em um portal com dashboards e relatórios, promovendo também a aprendizagem baseada em problemas.',
+        'tecnologias': 'Tecnologias utilizadas:',
+        'tecno': 'React, Node.js, TypeScript, PostgreSQL, Docker, IoT',
+        'contribuicao': 'Contribuições pessoais',
+        'cont': 'Durante o desenvolvimento deste projeto, contribuí significativamente para a arquitetura do sistema de coleta e processamento de dados meteorológicos. Trabalhei na integração dos sensores IoT com o backend, garantindo a transmissão confiável e em tempo real dos dados coletados. Implementei APIs RESTful para gerenciar a inserção e recuperação de dados, além de desenvolver dashboards interativos utilizando React e bibliotecas de visualização de dados. A utilização de TypeScript permitiu maior segurança no desenvolvimento, enquanto o Docker facilitou a implantação e escalabilidade do sistema. Este projeto ampliou minha experiência em IoT, processamento de dados em tempo real e desenvolvimento de interfaces para visualização de grandes volumes de informações.',
+        'hard': 'Hard Skills Efetivamente desenvolvidas:',
+        'hardD': 'React, Node.js, TypeScript, PostgreSQL, Docker, IoT, APIs RESTful, Data Visualization',
+        'soft': 'Soft Skills Efetivamente desenvolvidas:',
+        'so': 'Trabalho em equipe e resolução de problemas. O projeto exigiu colaboração estreita entre diferentes áreas (hardware, backend, frontend), desenvolvendo habilidades de comunicação técnica e coordenação de esforços. A natureza prática do monitoramento ambiental trouxe desafios inesperados relacionados à confiabilidade dos sensores e tratamento de dados inconsistentes, o que me forçou a desenvolver pensamento crítico e adaptabilidade para encontrar soluções criativas em tempo hábil. A experiência de trabalhar com um cliente real (Tecsus) também aprimorou minhas habilidades de gestão de expectativas e apresentação de resultados.',
+        'imagem': '../static/tecsus.png'
+    },
+
+    {
+        'titulo': 'Projeto API 5DSM segundo semestre de 2025',
+        'descricao': 'Aplicativo de Gestão Administrativa desenvolvido para a Guarnição de Caçapava. Projeto acadêmico realizado por alunos do 5º semestre de DSM com o objetivo de digitalizar e automatizar a gestão de almoxarifado, substituindo controles manuais e descentralizados que dificultam o rastreamento de itens e impactam a eficiência operacional. A solução oferece controle em tempo real de estoque, histórico de movimentações, gestão de requisições e relatórios gerenciais, promovendo maior transparência e eficiência nos processos administrativos da guarnição.',
+        'tecnologias': 'Tecnologias utilizadas:',
+        'tecno': 'Flutter, Dart, Vue.js, PostgreSQL, Java, Python, Git',
+        'contribuicao': 'Product Owner',
+        'cont': 'Como Product Owner deste projeto, minha principal responsabilidade foi garantir o alinhamento entre as necessidades da Guarnição de Caçapava e a solução desenvolvida pela equipe. Conduzi o levantamento de requisitos junto aos stakeholders, priorizei o backlog do produto e defini as funcionalidades essenciais para cada sprint. Trabalhei na elaboração de user stories detalhadas, critérios de aceitação e validação das entregas. Facilitei a comunicação entre a equipe de desenvolvimento e o cliente, garantindo que as expectativas fossem gerenciadas adequadamente e que o produto final atendesse às demandas operacionais. A experiência me permitiu desenvolver visão estratégica de produto, habilidades de negociação e capacidade de tomar decisões que equilibram viabilidade técnica com valor de negócio.',
+        'hard': 'Hard Skills Efetivamente desenvolvidas:',
+        'hardD': 'Gestão de Produto, Metodologias Ágeis, Scrum, Levantamento de Requisitos, Priorização de Backlog, User Stories, Flutter, Vue.js, PostgreSQL',
+        'soft': 'Soft Skills Efetivamente desenvolvidas:',
+        'so': 'Liderança e visão estratégica. Como Product Owner, desenvolvi fortemente a capacidade de liderar sem autoridade formal, influenciando a equipe através da visão clara do produto e da comunicação efetiva. A gestão de stakeholders exigiu habilidades avançadas de negociação, especialmente ao balancear expectativas do cliente com limitações técnicas e de tempo. Enfrentei desafios relacionados à mudança de prioridades e à necessidade de tomar decisões difíceis sobre escopo, o que aprimorou minha capacidade de pensamento crítico e tomada de decisão sob pressão. A experiência de traduzir necessidades militares complexas em funcionalidades de software também desenvolveu minha empatia e capacidade de compreender contextos organizacionais diferentes.',
+        'imagem': '../static/guarnicao.png'
+    },
 ]
 
 @app.route('/')

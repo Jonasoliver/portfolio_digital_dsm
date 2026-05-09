@@ -1,0 +1,1139 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Jonas Miguel Oliveira — Desenvolvedor Full Stack e Power Platform na ProNext. Estudante de DSM na Fatec São José dos Campos.">
+    <meta name="theme-color" content="#050507">
+    <title>Apresentação — Jonas Miguel Oliveira</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+    <style>
+        /* ===== Navbar ===== */
+        .nav-shell {
+            position: fixed;
+            top: 0; left: 0; width: 100%;
+            z-index: 1000;
+            padding: 1.25rem 0;
+            transition: padding 0.4s var(--ease-out), background 0.4s var(--ease-out), backdrop-filter 0.4s var(--ease-out), border-color 0.4s var(--ease-out);
+            border-bottom: 1px solid transparent;
+        }
+        .nav-shell.is-scrolled {
+            padding: 0.7rem 0;
+            background: rgba(5, 5, 7, 0.75);
+            backdrop-filter: blur(24px) saturate(180%);
+            -webkit-backdrop-filter: blur(24px) saturate(180%);
+            border-bottom-color: var(--border-default);
+        }
+        .nav-inner {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .nav-brand {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.6rem;
+            text-decoration: none;
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 700;
+            font-size: 1.15rem;
+            color: var(--text-primary);
+            cursor: none;
+        }
+        .nav-brand-mark {
+            width: 36px; height: 36px;
+            display: inline-flex;
+            align-items: center; justify-content: center;
+            border-radius: 10px;
+            background: var(--gradient-cool);
+            color: #fff; font-weight: 800; font-size: 0.85rem;
+            letter-spacing: -0.02em;
+            box-shadow: 0 6px 18px rgba(0, 212, 255, 0.35);
+            transition: transform 0.4s var(--ease-spring);
+        }
+        .nav-brand:hover .nav-brand-mark { transform: rotate(-8deg) scale(1.05); }
+        .nav-brand-text { color: var(--text-primary); }
+        .nav-brand-text span {
+            color: var(--text-tertiary);
+            font-weight: 400;
+            margin-left: 0.4rem;
+            font-size: 0.85rem;
+            font-family: 'JetBrains Mono', monospace;
+        }
+        .nav-links {
+            display: flex; align-items: center;
+            gap: 0.4rem; list-style: none;
+            margin: 0; padding: 0.4rem;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border-default);
+            border-radius: 100px;
+            backdrop-filter: blur(10px);
+        }
+        .nav-link {
+            position: relative;
+            padding: 0.5rem 1.1rem;
+            font-size: 0.88rem; font-weight: 500;
+            color: var(--text-secondary);
+            text-decoration: none;
+            border-radius: 100px;
+            transition: color 0.3s ease, background 0.3s ease;
+            cursor: none;
+        }
+        .nav-link:hover { color: var(--text-primary); }
+        .nav-link.is-active {
+            color: var(--text-primary);
+            background: rgba(255, 255, 255, 0.07);
+        }
+        .nav-cta {
+            padding: 0.55rem 1.2rem;
+            font-size: 0.85rem; font-weight: 600;
+            color: #fff;
+            background: var(--gradient-cool);
+            border-radius: 100px;
+            text-decoration: none;
+            transition: transform 0.3s var(--ease-out), box-shadow 0.3s var(--ease-out);
+            display: inline-flex; align-items: center; gap: 0.4rem;
+            cursor: none;
+        }
+        .nav-cta:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 24px rgba(0, 212, 255, 0.35);
+            color: #fff;
+        }
+        .nav-toggle {
+            display: none;
+            background: transparent;
+            border: 1px solid var(--border-default);
+            border-radius: 12px;
+            padding: 0.55rem;
+            color: var(--text-primary);
+            cursor: pointer;
+        }
+        .nav-toggle span {
+            display: block; width: 22px; height: 2px;
+            background: var(--text-primary);
+            margin: 4px 0;
+            transition: all 0.3s var(--ease-out);
+            border-radius: 2px;
+        }
+        .nav-toggle.is-open span:nth-child(1) { transform: translateY(6px) rotate(45deg); }
+        .nav-toggle.is-open span:nth-child(2) { opacity: 0; }
+        .nav-toggle.is-open span:nth-child(3) { transform: translateY(-6px) rotate(-45deg); }
+        @media (max-width: 880px) {
+            .nav-toggle { display: block; }
+            .nav-links, .nav-cta { display: none; }
+            .nav-shell.is-open .nav-links {
+                display: flex; flex-direction: column;
+                position: absolute; top: 100%;
+                left: 1.25rem; right: 1.25rem;
+                margin-top: 0.75rem; padding: 0.75rem;
+                background: rgba(12, 12, 16, 0.95);
+                backdrop-filter: blur(24px);
+                border-radius: 20px;
+                border: 1px solid var(--border-default);
+                box-shadow: var(--shadow-lg);
+                gap: 0.25rem;
+            }
+            .nav-shell.is-open .nav-link { width: 100%; text-align: center; padding: 0.75rem; }
+            .nav-inner { padding: 0 1.25rem; }
+        }
+        .scroll-progress {
+            position: fixed;
+            top: 0; left: 0;
+            height: 2px; width: 0;
+            background: var(--gradient-cool);
+            z-index: 1001;
+            transition: width 0.1s linear;
+            box-shadow: 0 0 8px var(--accent-glow);
+        }
+        .page-content { padding-top: 110px; animation: pageIn 0.7s var(--ease-out); }
+        @keyframes pageIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ===== Hero ===== */
+        .hero {
+            position: relative;
+            min-height: calc(100vh - 110px);
+            display: flex; align-items: center;
+            padding: 4rem 1.5rem 6rem;
+            overflow: hidden;
+        }
+        .hero-grid {
+            max-width: 1280px; margin: 0 auto; width: 100%;
+            display: grid;
+            grid-template-columns: 1.4fr 1fr;
+            gap: 4rem; align-items: center;
+        }
+        .hero-text { position: relative; z-index: 2; }
+        .hero-availability {
+            display: inline-flex; align-items: center; gap: 0.6rem;
+            padding: 0.5rem 1rem;
+            background: rgba(34, 197, 94, 0.08);
+            border: 1px solid rgba(34, 197, 94, 0.25);
+            border-radius: 100px;
+            font-size: 0.82rem; font-weight: 500;
+            color: #4ade80;
+            margin-bottom: 2rem;
+            font-family: 'JetBrains Mono', monospace;
+        }
+        .hero-availability::before {
+            content: '';
+            width: 8px; height: 8px;
+            border-radius: 50%;
+            background: #4ade80;
+            box-shadow: 0 0 10px #4ade80;
+            animation: pulseDot 2s infinite;
+        }
+        .hero-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: clamp(2.5rem, 6.5vw, 5.5rem);
+            font-weight: 700;
+            line-height: 1.02;
+            letter-spacing: -0.04em;
+            margin-bottom: 1.5rem;
+        }
+        .hero-title .line { display: block; overflow: hidden; }
+        .hero-title .line span {
+            display: inline-block;
+            animation: lineUp 1s var(--ease-out) backwards;
+        }
+        .hero-title .line:nth-child(1) span { animation-delay: 0.1s; }
+        .hero-title .line:nth-child(2) span { animation-delay: 0.25s; }
+        .hero-title .line:nth-child(3) span { animation-delay: 0.4s; }
+        @keyframes lineUp {
+            from { transform: translateY(110%); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        .hero-rotator {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: clamp(1rem, 1.8vw, 1.25rem);
+            color: var(--text-secondary);
+            margin-bottom: 1.75rem;
+            height: 1.6em;
+        }
+        .hero-rotator::before { content: '> '; color: var(--accent-1); }
+        .hero-rotator .typed {
+            background: var(--gradient-cool);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-weight: 600;
+        }
+        .hero-rotator .caret {
+            display: inline-block;
+            width: 8px; height: 1.1em;
+            background: var(--accent-1);
+            margin-left: 2px;
+            vertical-align: text-bottom;
+            animation: blink 0.9s steps(1) infinite;
+        }
+        @keyframes blink { 50% { opacity: 0; } }
+        .hero-bio {
+            font-size: clamp(1rem, 1.4vw, 1.12rem);
+            color: var(--text-secondary);
+            max-width: 540px;
+            margin-bottom: 2.5rem;
+            line-height: 1.75;
+        }
+        .hero-actions { display: flex; gap: 1rem; flex-wrap: wrap; margin-bottom: 3rem; }
+        .hero-meta {
+            display: flex; gap: 2.5rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--border-default);
+            max-width: 540px;
+            flex-wrap: wrap;
+        }
+        .hero-meta-item .num {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.75rem; font-weight: 700;
+            background: var(--gradient-cool);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .hero-meta-item .label {
+            font-size: 0.78rem; text-transform: uppercase;
+            letter-spacing: 0.12em;
+            color: var(--text-tertiary);
+            margin-top: 0.25rem;
+        }
+        .hero-visual {
+            position: relative;
+            aspect-ratio: 1 / 1.05;
+            max-width: 460px;
+            margin-left: auto;
+        }
+        .hero-orb {
+            position: absolute; inset: 0;
+            border-radius: 32px; overflow: hidden;
+            background: linear-gradient(135deg, rgba(0, 212, 255, 0.15), rgba(139, 92, 246, 0.15));
+            border: 1px solid var(--border-default);
+            box-shadow: var(--shadow-lg);
+            transition: transform 0.6s var(--ease-out);
+        }
+        .hero-orb img {
+            width: 100%; height: 100%; object-fit: cover;
+            filter: contrast(1.05) saturate(1.1);
+            transition: transform 0.8s var(--ease-out);
+        }
+        .hero-orb::after {
+            content: ''; position: absolute; inset: 0;
+            background: linear-gradient(135deg, rgba(0, 212, 255, 0.05) 0%, transparent 40%, rgba(139, 92, 246, 0.15) 100%);
+            pointer-events: none;
+        }
+        .hero-visual:hover .hero-orb img { transform: scale(1.06); }
+        .hero-badge-card {
+            position: absolute;
+            background: rgba(12, 12, 16, 0.85);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid var(--border-default);
+            border-radius: 16px;
+            padding: 0.85rem 1.1rem;
+            display: flex; align-items: center; gap: 0.75rem;
+            font-size: 0.85rem;
+            box-shadow: var(--shadow-md);
+            animation: floaty 4s ease-in-out infinite;
+        }
+        .hero-badge-card.bc-1 { top: 6%; left: -12%; animation-delay: 0s; }
+        .hero-badge-card.bc-2 { bottom: 12%; right: -10%; animation-delay: 1.5s; }
+        .hero-badge-card.bc-3 { bottom: 38%; left: -16%; animation-delay: 3s; }
+        @keyframes floaty {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-12px); }
+        }
+        .hero-badge-icon {
+            width: 36px; height: 36px;
+            border-radius: 10px;
+            background: var(--gradient-cool);
+            display: inline-flex;
+            align-items: center; justify-content: center;
+            color: #fff;
+        }
+        .hero-badge-card .label {
+            font-size: 0.7rem;
+            color: var(--text-tertiary);
+            font-family: 'JetBrains Mono', monospace;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            margin-bottom: 2px;
+        }
+        .hero-badge-card .value { font-weight: 600; color: var(--text-primary); }
+
+        /* ===== About long-form ===== */
+        .about-block { max-width: 1100px; margin: 0 auto; padding: 5rem 1.5rem; }
+        .about-grid {
+            display: grid; grid-template-columns: 1fr 1fr;
+            gap: 4rem; align-items: center;
+        }
+        .about-text p {
+            color: var(--text-secondary);
+            font-size: 1.05rem;
+            line-height: 1.85;
+            margin-bottom: 1.25rem;
+        }
+        .about-text strong { color: var(--text-primary); font-weight: 600; }
+        .about-photo {
+            position: relative;
+            aspect-ratio: 4 / 5;
+            border-radius: 28px;
+            overflow: hidden;
+            border: 1px solid var(--border-default);
+            box-shadow: var(--shadow-lg);
+        }
+        .about-photo img {
+            width: 100%; height: 100%; object-fit: cover;
+            transition: transform 0.8s var(--ease-out);
+        }
+        .about-photo:hover img { transform: scale(1.04); }
+        .about-photo::after {
+            content: ''; position: absolute; inset: 0;
+            background: linear-gradient(180deg, transparent 60%, rgba(5, 5, 7, 0.7) 100%);
+            pointer-events: none;
+        }
+        .photo-tags {
+            position: absolute;
+            bottom: 1.25rem; left: 1.25rem; right: 1.25rem;
+            display: flex; gap: 0.5rem;
+            flex-wrap: wrap;
+            z-index: 1;
+        }
+        .photo-tag {
+            padding: 0.4rem 0.8rem;
+            background: rgba(12, 12, 16, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid var(--border-default);
+            border-radius: 100px;
+            font-size: 0.78rem;
+            color: var(--text-primary);
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        /* ===== Marquee ===== */
+        .marquee {
+            margin: 4rem 0 0;
+            padding: 2rem 0;
+            border-top: 1px solid var(--border-subtle);
+            border-bottom: 1px solid var(--border-subtle);
+            overflow: hidden;
+            position: relative;
+        }
+        .marquee-track {
+            display: flex; gap: 4rem;
+            white-space: nowrap;
+            animation: marquee 30s linear infinite;
+        }
+        .marquee-item {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: clamp(1.5rem, 3vw, 2.5rem);
+            font-weight: 700;
+            color: var(--text-tertiary);
+            display: inline-flex; align-items: center; gap: 4rem;
+            transition: color 0.3s ease;
+        }
+        .marquee-item:hover { color: var(--accent-1); }
+        .marquee-item::after { content: '✦'; color: var(--accent-1); font-size: 0.6em; }
+        @keyframes marquee {
+            from { transform: translateX(0); }
+            to { transform: translateX(-50%); }
+        }
+
+        /* ===== Sections genéricas ===== */
+        .section-block { padding: 5rem 1.5rem; }
+        .section-wrap { max-width: 1280px; margin: 0 auto; }
+        .stack-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.25rem;
+        }
+        .stack-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-default);
+            border-radius: 24px;
+            padding: 2rem;
+            transition: all 0.4s var(--ease-out);
+            position: relative;
+            overflow: hidden;
+        }
+        .stack-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 2px;
+            background: var(--gradient-cool);
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.5s var(--ease-out);
+        }
+        .stack-card:hover::before { transform: scaleX(1); }
+        .stack-card:hover {
+            background: var(--bg-card-hover);
+            border-color: rgba(0, 212, 255, 0.2);
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-md);
+        }
+        .stack-card h3 { font-size: 1.05rem; margin-bottom: 1rem; color: var(--text-primary); }
+        .stack-pills { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+        .stack-pill {
+            padding: 0.35rem 0.75rem;
+            font-size: 0.78rem; font-weight: 500;
+            font-family: 'JetBrains Mono', monospace;
+            color: var(--text-secondary);
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid var(--border-default);
+            border-radius: 100px;
+            transition: all 0.25s ease;
+        }
+        .stack-pill:hover {
+            color: var(--accent-1);
+            background: rgba(0, 212, 255, 0.08);
+            border-color: rgba(0, 212, 255, 0.3);
+        }
+
+        /* ===== Experiência ===== */
+        .exp-card {
+            max-width: 1100px;
+            margin: 0 auto;
+            background: var(--bg-card);
+            border: 1px solid var(--border-default);
+            border-radius: 28px;
+            padding: 2.5rem;
+            transition: all 0.5s var(--ease-out);
+            position: relative;
+            overflow: hidden;
+        }
+        .exp-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #f59e0b, #00d4ff, #8b5cf6);
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.7s var(--ease-out);
+        }
+        .exp-card:hover::before { transform: scaleX(1); }
+        .exp-card:hover {
+            background: var(--bg-card-hover);
+            border-color: rgba(0, 212, 255, 0.22);
+            box-shadow: var(--shadow-md);
+        }
+        .exp-header {
+            display: grid;
+            grid-template-columns: 96px 1fr;
+            gap: 1.5rem;
+            align-items: center;
+            padding-bottom: 1.75rem;
+            margin-bottom: 1.75rem;
+            border-bottom: 1px solid var(--border-default);
+        }
+        .exp-logo {
+            width: 96px; height: 96px;
+            border-radius: 20px;
+            background: #fff;
+            padding: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+        }
+        .exp-logo img { width: 100%; height: 100%; object-fit: contain; }
+        .exp-period {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.78rem;
+            text-transform: uppercase;
+            letter-spacing: 0.14em;
+            color: var(--accent-1);
+            margin-bottom: 0.4rem;
+        }
+        .exp-headline h3 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: clamp(1.3rem, 2.4vw, 1.75rem);
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+        .exp-company {
+            background: var(--gradient-cool);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .exp-summary {
+            color: var(--text-secondary);
+            font-size: 1rem;
+            line-height: 1.65;
+            max-width: 640px;
+        }
+        .exp-grid {
+            display: grid;
+            grid-template-columns: 1.4fr 1fr;
+            gap: 2rem;
+            align-items: start;
+        }
+        .exp-label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.78rem;
+            text-transform: uppercase;
+            letter-spacing: 0.14em;
+            color: var(--accent-1);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .exp-label::before {
+            content: '';
+            width: 6px; height: 6px;
+            border-radius: 50%;
+            background: var(--accent-1);
+            box-shadow: 0 0 8px var(--accent-glow);
+        }
+        .exp-list {
+            list-style: none; padding: 0; margin: 0;
+            display: grid; gap: 0.75rem;
+        }
+        .exp-list li {
+            position: relative;
+            padding-left: 1.6rem;
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+        .exp-list li::before {
+            content: '';
+            position: absolute;
+            left: 0; top: 0.5em;
+            width: 8px; height: 8px;
+            border-radius: 2px;
+            background: var(--gradient-cool);
+            transform: rotate(45deg);
+        }
+        .exp-side { display: flex; flex-direction: column; gap: 1.5rem; }
+        .exp-award {
+            background: linear-gradient(135deg, rgba(245, 158, 11, 0.08), rgba(0, 212, 255, 0.06));
+            border: 1px solid rgba(245, 158, 11, 0.25);
+            border-radius: 18px;
+            padding: 1.25rem;
+            display: grid;
+            grid-template-columns: 44px 1fr;
+            gap: 0.85rem;
+        }
+        .exp-award-icon {
+            width: 44px; height: 44px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #f59e0b, #ef4444);
+            display: inline-flex;
+            align-items: center; justify-content: center;
+            color: #fff;
+            box-shadow: 0 6px 16px rgba(245, 158, 11, 0.3);
+        }
+        .exp-award-label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.72rem;
+            text-transform: uppercase;
+            letter-spacing: 0.14em;
+            color: #f59e0b;
+            margin-bottom: 0.35rem;
+        }
+        .exp-award-text p {
+            color: var(--text-primary);
+            font-size: 0.92rem;
+            line-height: 1.6;
+            font-weight: 500;
+            margin: 0;
+        }
+
+        /* ===== Timeline ===== */
+        .timeline {
+            position: relative;
+            padding: 1rem 0;
+            max-width: 820px;
+            margin: 0 auto;
+        }
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 12px;
+            top: 0; bottom: 0;
+            width: 2px;
+            background: linear-gradient(180deg, var(--accent-1), var(--accent-2), transparent);
+        }
+        .timeline-item { position: relative; padding: 0 0 2.5rem 3rem; }
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: 6px; top: 4px;
+            width: 14px; height: 14px;
+            border-radius: 50%;
+            background: var(--bg-primary);
+            border: 2px solid var(--accent-1);
+            box-shadow: 0 0 0 4px rgba(0, 212, 255, 0.15);
+        }
+        .timeline-item .year {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.14em;
+            color: var(--accent-1);
+            margin-bottom: 0.4rem;
+        }
+        .timeline-item h3 { font-size: 1.2rem; margin-bottom: 0.5rem; }
+        .timeline-item p { color: var(--text-secondary); line-height: 1.7; }
+
+        /* ===== Soft skills ===== */
+        .soft-skills {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.6rem;
+            justify-content: center;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .skill-pill {
+            padding: 0.65rem 1.2rem;
+            border-radius: 100px;
+            background: var(--bg-card);
+            border: 1px solid var(--border-default);
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: all 0.3s var(--ease-out);
+            cursor: none;
+        }
+        .skill-pill:hover {
+            background: rgba(0, 212, 255, 0.08);
+            border-color: var(--accent-1);
+            color: var(--text-primary);
+            transform: translateY(-3px);
+        }
+
+        /* ===== CTA ===== */
+        .cta-strip { padding: 4rem 1.5rem 2rem; }
+        .cta-card {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 4rem 3rem;
+            text-align: center;
+            border-radius: 32px;
+            background: linear-gradient(135deg, rgba(0, 212, 255, 0.08), rgba(139, 92, 246, 0.08));
+            border: 1px solid var(--border-default);
+            position: relative;
+            overflow: hidden;
+        }
+        .cta-card::before {
+            content: '';
+            position: absolute;
+            inset: -50%;
+            background: conic-gradient(from 0deg, transparent, rgba(0, 212, 255, 0.1), transparent 30%);
+            animation: spin 12s linear infinite;
+        }
+        .cta-card > * { position: relative; z-index: 1; }
+        .cta-card h2 {
+            font-size: clamp(1.8rem, 4vw, 2.75rem);
+            margin-bottom: 1rem;
+        }
+        .cta-card p {
+            color: var(--text-secondary);
+            max-width: 540px;
+            margin: 0 auto 2rem;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        @media (max-width: 991px) {
+            .hero-grid { grid-template-columns: 1fr; gap: 3rem; }
+            .hero-visual { margin: 0 auto; max-width: 360px; }
+            .about-grid { grid-template-columns: 1fr; gap: 2.5rem; }
+            .about-photo { max-width: 380px; margin: 0 auto; }
+            .hero-meta { gap: 1.5rem; }
+            .hero-badge-card.bc-1 { left: -2%; }
+            .hero-badge-card.bc-2 { right: -2%; }
+            .hero-badge-card.bc-3 { left: -2%; }
+        }
+        @media (max-width: 800px) {
+            .exp-card { padding: 1.75rem; }
+            .exp-header { grid-template-columns: 1fr; text-align: left; }
+            .exp-logo { width: 72px; height: 72px; padding: 0.75rem; }
+            .exp-grid { grid-template-columns: 1fr; gap: 1.5rem; }
+        }
+        @media (max-width: 600px) {
+            .hero { padding: 2rem 1.25rem 4rem; }
+            .hero-meta { flex-direction: row; }
+            .hero-actions .btn-primary-custom,
+            .hero-actions .btn-secondary-custom { flex: 1; justify-content: center; }
+            .hero-badge-card { display: none; }
+            .stack-card { padding: 1.5rem; }
+            .cta-card { padding: 2.5rem 1.5rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="cursor-dot" id="cursor-dot"></div>
+    <div class="cursor-ring" id="cursor-ring"></div>
+    <div class="scroll-progress" id="scroll-progress"></div>
+    <canvas id="particles-canvas" class="particles"></canvas>
+
+    <!-- ===== Navbar ===== -->
+    <nav class="nav-shell" id="nav-shell">
+        <div class="nav-inner">
+            <a class="nav-brand magnetic" href="index.html" data-cursor="hover">
+                <span class="nav-brand-mark">JM</span>
+                <span class="nav-brand-text">Jonas Miguel<span>// Full Stack</span></span>
+            </a>
+            <button class="nav-toggle" id="nav-toggle" aria-label="Menu"><span></span><span></span><span></span></button>
+            <ul class="nav-links" id="nav-links">
+                <li><a class="nav-link" href="index.html" data-cursor="hover">Apresentação</a></li>
+                <li><a class="nav-link" href="projetos.html" data-cursor="hover">Projetos</a></li>
+                <li><a class="nav-link" href="atuacao.html" data-cursor="hover">Atuação</a></li>
+            </ul>
+            <a class="nav-cta magnetic" href="https://www.linkedin.com/in/jonas-miguel-ol/" target="_blank" rel="noopener" data-cursor="hover">
+                Contato
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+            </a>
+        </div>
+    </nav>
+
+    <!-- ===== Conteúdo ===== -->
+    <main class="content page-content">
+
+        <!-- HERO -->
+        <section class="hero">
+            <div class="hero-grid">
+                <div class="hero-text">
+                    <div class="hero-availability">Disponível para novos projetos</div>
+                    <h1 class="hero-title">
+                        <span class="line"><span>Olá, sou</span></span>
+                        <span class="line"><span class="gradient-text">Jonas Miguel.</span></span>
+                        <span class="line"><span>Desenvolvo soluções.</span></span>
+                    </h1>
+                    <div class="hero-rotator">
+                        <span class="typed" id="typed" data-words='["Full Stack Developer","Power Platform na ProNext","Estudante DSM @ Fatec","Apaixonado por código limpo"]'></span><span class="caret"></span>
+                    </div>
+                    <p class="hero-bio">
+                        Desenvolvedor Junior 2 na ProNext há 2 anos e 4 meses, atuando em Power Platform, APIs C#, banco Azure e soluções com IA. No 6º semestre de DSM na Fatec São José dos Campos.
+                    </p>
+                    <div class="hero-actions">
+                        <a href="projetos.html" class="btn-primary-custom magnetic" data-cursor="hover">
+                            Ver projetos
+                            <svg class="btn-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+                        </a>
+                        <a href="atuacao.html" class="btn-secondary-custom magnetic" data-cursor="hover">Áreas de atuação</a>
+                    </div>
+                    <div class="hero-meta">
+                        <div class="hero-meta-item">
+                            <div class="num" data-counter="6" data-counter-suffix="+">0</div>
+                            <div class="label">Projetos API</div>
+                        </div>
+                        <div class="hero-meta-item">
+                            <div class="num" data-counter="6">0</div>
+                            <div class="label">Semestre DSM</div>
+                        </div>
+                        <div class="hero-meta-item">
+                            <div class="num" data-counter="2" data-counter-suffix="+">0</div>
+                            <div class="label">Anos na ProNext</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="hero-visual">
+                    <div class="hero-orb" data-tilt>
+                        <img src="assets/img/perfil.png" alt="Jonas Miguel Oliveira">
+                    </div>
+                    <div class="hero-badge-card bc-1">
+                        <div class="hero-badge-icon">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+                        </div>
+                        <div><div class="label">Stack</div><div class="value">Full Stack</div></div>
+                    </div>
+                    <div class="hero-badge-card bc-2">
+                        <div class="hero-badge-icon">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+                        </div>
+                        <div><div class="label">Trabalho</div><div class="value">Junior 2 · ProNext</div></div>
+                    </div>
+                    <div class="hero-badge-card bc-3">
+                        <div class="hero-badge-icon">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                        </div>
+                        <div><div class="label">Status</div><div class="value">6º semestre</div></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- MARQUEE -->
+        <div class="marquee">
+            <div class="marquee-track">
+                <span class="marquee-item">React</span>
+                <span class="marquee-item">Node.js</span>
+                <span class="marquee-item">Python</span>
+                <span class="marquee-item">FastAPI</span>
+                <span class="marquee-item">TypeScript</span>
+                <span class="marquee-item">Power Platform</span>
+                <span class="marquee-item">C#</span>
+                <span class="marquee-item">Azure</span>
+                <span class="marquee-item">PostGIS</span>
+                <span class="marquee-item">React</span>
+                <span class="marquee-item">Node.js</span>
+                <span class="marquee-item">Python</span>
+                <span class="marquee-item">FastAPI</span>
+                <span class="marquee-item">TypeScript</span>
+                <span class="marquee-item">Power Platform</span>
+                <span class="marquee-item">C#</span>
+                <span class="marquee-item">Azure</span>
+                <span class="marquee-item">PostGIS</span>
+            </div>
+        </div>
+
+        <!-- ABOUT -->
+        <section class="about-block">
+            <div class="section-heading" data-reveal>
+                <span class="eyebrow">Sobre mim</span>
+                <h2 class="section-title gradient-text">Quem sou eu</h2>
+                <p class="section-subtitle">
+                    Mais do que um portfólio — uma síntese da minha jornada como desenvolvedor.
+                </p>
+            </div>
+            <div class="about-grid">
+                <div class="about-text" data-reveal>
+                    <p>
+                        Sou <strong>Jonas Miguel de Oliveira</strong>, tenho <strong>22 anos</strong> e estou no
+                        <strong>6º semestre</strong> de Desenvolvimento de Software Multiplataforma na
+                        <strong>Fatec Jessen Vidal — São José dos Campos</strong>.
+                    </p>
+                    <p>
+                        Atuo profissionalmente como <strong>Desenvolvedor Junior 2 na ProNext</strong> há 2 anos e 4 meses,
+                        trabalhando com Power Platform, APIs em C#, bancos Azure em produção e soluções com IA — tanto
+                        em protótipos quanto em projetos reais. Converso diretamente com clientes, faço levantamento de
+                        requisitos, validação e entrego apps do início ao fim.
+                    </p>
+                    <p>
+                        Acredito que tecnologia boa é a que resolve problemas com simplicidade. Por isso busco soluções
+                        enxutas, performáticas e bem desenhadas — sem perder de vista a experiência de quem vai usar.
+                    </p>
+                </div>
+                <div class="about-photo" data-reveal data-reveal-delay="1">
+                    <img src="assets/img/perfil.png" alt="Jonas Miguel Oliveira">
+                    <div class="photo-tags">
+                        <span class="photo-tag">22 anos</span>
+                        <span class="photo-tag">SJC · SP</span>
+                        <span class="photo-tag">DSM · 6º</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- STACK -->
+        <section class="section-block">
+            <div class="section-wrap">
+                <div class="section-heading" data-reveal>
+                    <span class="eyebrow">Stack tecnológico</span>
+                    <h2 class="section-title gradient-text">Tecnologias que utilizo</h2>
+                    <p class="section-subtitle">Linguagens, frameworks e ferramentas que aplico no dia a dia.</p>
+                </div>
+                <div class="stack-grid">
+                    <div class="stack-card" data-reveal data-reveal-delay="1">
+                        <h3>Linguagens</h3>
+                        <div class="stack-pills">
+                            <span class="stack-pill">JavaScript</span><span class="stack-pill">TypeScript</span>
+                            <span class="stack-pill">Python</span><span class="stack-pill">C#</span>
+                            <span class="stack-pill">Java</span><span class="stack-pill">Dart</span>
+                            <span class="stack-pill">SQL</span>
+                        </div>
+                    </div>
+                    <div class="stack-card" data-reveal data-reveal-delay="2">
+                        <h3>Front-end</h3>
+                        <div class="stack-pills">
+                            <span class="stack-pill">React</span><span class="stack-pill">Vue.js</span>
+                            <span class="stack-pill">HTML5</span><span class="stack-pill">CSS3</span>
+                        </div>
+                    </div>
+                    <div class="stack-card" data-reveal data-reveal-delay="3">
+                        <h3>Back-end</h3>
+                        <div class="stack-pills">
+                            <span class="stack-pill">Node.js</span><span class="stack-pill">FastAPI</span>
+                            <span class="stack-pill">Flask</span><span class="stack-pill">.NET</span>
+                            <span class="stack-pill">Spring</span>
+                        </div>
+                    </div>
+                    <div class="stack-card" data-reveal data-reveal-delay="1">
+                        <h3>Power Platform</h3>
+                        <div class="stack-pills">
+                            <span class="stack-pill">Power Apps</span><span class="stack-pill">Power Automate</span>
+                            <span class="stack-pill">Dataverse</span>
+                        </div>
+                    </div>
+                    <div class="stack-card" data-reveal data-reveal-delay="2">
+                        <h3>Banco de Dados</h3>
+                        <div class="stack-pills">
+                            <span class="stack-pill">PostgreSQL</span><span class="stack-pill">PostGIS</span>
+                            <span class="stack-pill">pgvector</span><span class="stack-pill">MySQL</span>
+                            <span class="stack-pill">Azure SQL</span>
+                        </div>
+                    </div>
+                    <div class="stack-card" data-reveal data-reveal-delay="3">
+                        <h3>DevOps &amp; Cloud</h3>
+                        <div class="stack-pills">
+                            <span class="stack-pill">Git</span><span class="stack-pill">Docker</span>
+                            <span class="stack-pill">Azure</span><span class="stack-pill">AWS</span>
+                            <span class="stack-pill">Linux</span>
+                        </div>
+                    </div>
+                    <div class="stack-card" data-reveal data-reveal-delay="1">
+                        <h3>Mobile &amp; Design</h3>
+                        <div class="stack-pills">
+                            <span class="stack-pill">Flutter</span><span class="stack-pill">Figma</span>
+                        </div>
+                    </div>
+                    <div class="stack-card" data-reveal data-reveal-delay="2">
+                        <h3>IA &amp; Geo</h3>
+                        <div class="stack-pills">
+                            <span class="stack-pill">LLMs</span><span class="stack-pill">PLN</span>
+                            <span class="stack-pill">GeoServer</span><span class="stack-pill">QGIS</span>
+                        </div>
+                    </div>
+                    <div class="stack-card" data-reveal data-reveal-delay="3">
+                        <h3>Práticas</h3>
+                        <div class="stack-pills">
+                            <span class="stack-pill">Scrum</span><span class="stack-pill">Code Review</span>
+                            <span class="stack-pill">REST APIs</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- EXPERIÊNCIA PROFISSIONAL -->
+        <section class="section-block" style="padding-top: 2rem;">
+            <div class="section-wrap">
+                <div class="section-heading" data-reveal>
+                    <span class="eyebrow">Experiência profissional</span>
+                    <h2 class="section-title gradient-text">Vida na empresa</h2>
+                    <p class="section-subtitle">Atuação como desenvolvedor em projetos reais com clientes corporativos.</p>
+                </div>
+                <article class="exp-card" data-reveal>
+                    <div class="exp-header">
+                        <div class="exp-logo">
+                            <img src="assets/img/pronext-logo.png" alt="ProNext">
+                        </div>
+                        <div class="exp-headline">
+                            <div class="exp-period">2 anos e 4 meses · atual</div>
+                            <h3>Desenvolvedor Junior 2 · <span class="exp-company">ProNext</span></h3>
+                            <p class="exp-summary">Desenvolvimento de software para empresas — Power Platform, APIs C#, banco Azure e soluções com IA.</p>
+                        </div>
+                    </div>
+                    <div class="exp-grid">
+                        <div class="exp-block">
+                            <div class="exp-label">Atividades</div>
+                            <ul class="exp-list">
+                                <li>Desenvolvimento de aplicações em Power Platform do início ao fim</li>
+                                <li>Manutenção e evolução de apps em produção</li>
+                                <li>Desenvolvimento e manutenção de APIs em C#</li>
+                                <li>Operação de bancos de dados em produção hospedados no Azure</li>
+                                <li>Levantamento de requisitos e validação direta com clientes</li>
+                                <li>Prototipação de interfaces no Figma</li>
+                                <li>Desenvolvimento de soluções com IA — de protótipos a projetos reais</li>
+                            </ul>
+                        </div>
+                        <div class="exp-side">
+                            <div class="exp-award">
+                                <div class="exp-award-icon">
+                                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="7"/><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"/></svg>
+                                </div>
+                                <div class="exp-award-text">
+                                    <div class="exp-award-label">Reconhecimento</div>
+                                    <p>Um aplicativo desenvolvido por mim do zero foi premiado pelo hall global da empresa cliente por eficiência de processo.</p>
+                                </div>
+                            </div>
+                            <div class="exp-block">
+                                <div class="exp-label">Stack</div>
+                                <div class="stack-pills">
+                                    <span class="stack-pill">Power Platform</span>
+                                    <span class="stack-pill">Power Apps</span>
+                                    <span class="stack-pill">Power Automate</span>
+                                    <span class="stack-pill">C#</span>
+                                    <span class="stack-pill">.NET</span>
+                                    <span class="stack-pill">Azure</span>
+                                    <span class="stack-pill">SQL</span>
+                                    <span class="stack-pill">Figma</span>
+                                    <span class="stack-pill">IA / LLMs</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+            </div>
+        </section>
+
+        <!-- TIMELINE -->
+        <section class="section-block">
+            <div class="section-wrap">
+                <div class="section-heading" data-reveal>
+                    <span class="eyebrow">Trajetória</span>
+                    <h2 class="section-title gradient-text">Minha jornada em DSM</h2>
+                    <p class="section-subtitle">Seis semestres de evolução técnica, projetos reais e responsabilidades crescentes.</p>
+                </div>
+                <div class="timeline">
+                    <div class="timeline-item" data-reveal data-reveal-delay="1">
+                        <div class="year">2023 · 2º semestre</div>
+                        <h3>1º DSM — Primeiros passos com Python &amp; Flask</h3>
+                        <p>Plataforma de informações sobre hospitais pediátricos com chat em tempo real. Fundamentos de backend, banco de dados e DevOps com Docker e AWS.</p>
+                    </div>
+                    <div class="timeline-item" data-reveal data-reveal-delay="2">
+                        <div class="year">2024 · 1º semestre</div>
+                        <h3>2º DSM — Full Stack com Node.js + React</h3>
+                        <p>Sistema de tickets e atendimento em tempo real. Aprofundei o ecossistema JavaScript, autenticação, autorização e responsividade.</p>
+                    </div>
+                    <div class="timeline-item" data-reveal data-reveal-delay="3">
+                        <div class="year">2024 · 2º semestre</div>
+                        <h3>3º DSM — Java, Spring &amp; segurança</h3>
+                        <p>Portal de transparência para a AFAPG, com Spring no backend, JWT para autenticação e React no front. Foco em segurança e dados sensíveis.</p>
+                    </div>
+                    <div class="timeline-item" data-reveal data-reveal-delay="1">
+                        <div class="year">2025 · 1º semestre</div>
+                        <h3>4º DSM — IoT &amp; visualização de dados</h3>
+                        <p>Plataforma de estações meteorológicas para a Tecsus. Sensores IoT, APIs RESTful em Node.js + TypeScript e dashboards em React.</p>
+                    </div>
+                    <div class="timeline-item" data-reveal data-reveal-delay="2">
+                        <div class="year">2025 · 2º semestre</div>
+                        <h3>5º DSM — Product Owner</h3>
+                        <p>App de gestão administrativa para a Guarnição de Caçapava. Liderança de backlog, requisitos, stakeholders e entregas. Projeto escolhido para implantação no Exército Brasileiro e condecorado com medalha de honra.</p>
+                    </div>
+                    <div class="timeline-item" data-reveal data-reveal-delay="3">
+                        <div class="year">2026 · 1º semestre · Hoje</div>
+                        <h3>6º DSM — Atlas (Visiona)</h3>
+                        <p>Sistema geoespacial com chatbot de PLN para a Visiona. FastAPI, PostGIS, pgvector, GeoServer e React. Integração com QGIS para análise por especialistas.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SOFT SKILLS -->
+        <section class="section-block">
+            <div class="section-wrap">
+                <div class="section-heading" data-reveal>
+                    <span class="eyebrow">Soft skills</span>
+                    <h2 class="section-title gradient-text">Como trabalho em time</h2>
+                    <p class="section-subtitle">Habilidades que desenvolvi liderando squads, atendendo clientes reais e conduzindo entregas.</p>
+                </div>
+                <div class="soft-skills" data-reveal>
+                    <span class="skill-pill" data-cursor="hover">Liderança</span>
+                    <span class="skill-pill" data-cursor="hover">Comunicação clara</span>
+                    <span class="skill-pill" data-cursor="hover">Visão estratégica</span>
+                    <span class="skill-pill" data-cursor="hover">Trabalho em equipe</span>
+                    <span class="skill-pill" data-cursor="hover">Negociação</span>
+                    <span class="skill-pill" data-cursor="hover">Resolução de problemas</span>
+                    <span class="skill-pill" data-cursor="hover">Pensamento crítico</span>
+                    <span class="skill-pill" data-cursor="hover">Gestão de tempo</span>
+                    <span class="skill-pill" data-cursor="hover">Adaptação</span>
+                    <span class="skill-pill" data-cursor="hover">Empatia</span>
+                    <span class="skill-pill" data-cursor="hover">Atenção a detalhes</span>
+                    <span class="skill-pill" data-cursor="hover">Aprendizado contínuo</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- CTA -->
+        <section class="cta-strip">
+            <div class="cta-card" data-reveal>
+                <span class="eyebrow">Vamos conversar</span>
+                <h2 class="gradient-text">Tem um projeto em mente?</h2>
+                <p>Estou sempre aberto a novas oportunidades, colaborações e desafios que envolvam desenvolvimento de software de qualidade.</p>
+                <div class="hero-actions" style="justify-content: center;">
+                    <a href="https://www.linkedin.com/in/jonas-miguel-ol/" target="_blank" rel="noopener" class="btn-primary-custom magnetic" data-cursor="hover">
+                        Falar comigo
+                        <svg class="btn-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+                    </a>
+                    <a href="https://github.com/Jonasoliver" target="_blank" rel="noopener" class="btn-secondary-custom magnetic" data-cursor="hover">Ver GitHub</a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- ===== Footer ===== -->
+    <footer class="footer">
+        <div style="max-width: 600px; margin: 0 auto;">
+            <h3 style="font-size: 1.5rem; margin-bottom: 0.5rem;" class="gradient-text">Vamos construir algo juntos</h3>
+            <p class="footer-tagline">Aberto para colaborações, freelas e oportunidades. Entre em contato pelos canais abaixo.</p>
+            <div class="social-icons">
+                <a href="https://www.instagram.com/jonaasmiguel/" target="_blank" rel="noopener" aria-label="Instagram" data-cursor="hover">
+                    <img src="assets/img/insta.png" alt="">
+                </a>
+                <a href="https://github.com/Jonasoliver" target="_blank" rel="noopener" aria-label="GitHub" data-cursor="hover">
+                    <img src="assets/img/git.png" alt="">
+                </a>
+                <a href="https://www.linkedin.com/in/jonas-miguel-ol/" target="_blank" rel="noopener" aria-label="LinkedIn" data-cursor="hover">
+                    <img src="assets/img/linked.png" alt="">
+                </a>
+            </div>
+            <p class="footer-meta">© 2026 Jonas Miguel Oliveira · Fatec São José dos Campos · DSM</p>
+        </div>
+    </footer>
+
+    <script src="assets/js/main.js"></script>
+</body>
+</html>

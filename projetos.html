@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Projetos API de Jonas Miguel Oliveira — seis semestres de Atividades Práticas Integradoras com clientes reais.">
+    <meta name="theme-color" content="#050507">
+    <title>Projetos — Jonas Miguel Oliveira</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+    <style>
+        /* ===== Navbar (duplicada para self-contained) ===== */
+        .nav-shell { position: fixed; top: 0; left: 0; width: 100%; z-index: 1000; padding: 1.25rem 0; transition: padding 0.4s var(--ease-out), background 0.4s var(--ease-out), backdrop-filter 0.4s var(--ease-out), border-color 0.4s var(--ease-out); border-bottom: 1px solid transparent; }
+        .nav-shell.is-scrolled { padding: 0.7rem 0; background: rgba(5, 5, 7, 0.75); backdrop-filter: blur(24px) saturate(180%); -webkit-backdrop-filter: blur(24px) saturate(180%); border-bottom-color: var(--border-default); }
+        .nav-inner { max-width: 1280px; margin: 0 auto; padding: 0 2rem; display: flex; align-items: center; justify-content: space-between; }
+        .nav-brand { display: inline-flex; align-items: center; gap: 0.6rem; text-decoration: none; font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 1.15rem; color: var(--text-primary); cursor: none; }
+        .nav-brand-mark { width: 36px; height: 36px; display: inline-flex; align-items: center; justify-content: center; border-radius: 10px; background: var(--gradient-cool); color: #fff; font-weight: 800; font-size: 0.85rem; letter-spacing: -0.02em; box-shadow: 0 6px 18px rgba(0, 212, 255, 0.35); transition: transform 0.4s var(--ease-spring); }
+        .nav-brand:hover .nav-brand-mark { transform: rotate(-8deg) scale(1.05); }
+        .nav-brand-text { color: var(--text-primary); }
+        .nav-brand-text span { color: var(--text-tertiary); font-weight: 400; margin-left: 0.4rem; font-size: 0.85rem; font-family: 'JetBrains Mono', monospace; }
+        .nav-links { display: flex; align-items: center; gap: 0.4rem; list-style: none; margin: 0; padding: 0.4rem; background: rgba(255, 255, 255, 0.03); border: 1px solid var(--border-default); border-radius: 100px; backdrop-filter: blur(10px); }
+        .nav-link { position: relative; padding: 0.5rem 1.1rem; font-size: 0.88rem; font-weight: 500; color: var(--text-secondary); text-decoration: none; border-radius: 100px; transition: color 0.3s ease, background 0.3s ease; cursor: none; }
+        .nav-link:hover { color: var(--text-primary); }
+        .nav-link.is-active { color: var(--text-primary); background: rgba(255, 255, 255, 0.07); }
+        .nav-cta { padding: 0.55rem 1.2rem; font-size: 0.85rem; font-weight: 600; color: #fff; background: var(--gradient-cool); border-radius: 100px; text-decoration: none; transition: transform 0.3s var(--ease-out), box-shadow 0.3s var(--ease-out); display: inline-flex; align-items: center; gap: 0.4rem; cursor: none; }
+        .nav-cta:hover { transform: translateY(-2px); box-shadow: 0 10px 24px rgba(0, 212, 255, 0.35); color: #fff; }
+        .nav-toggle { display: none; background: transparent; border: 1px solid var(--border-default); border-radius: 12px; padding: 0.55rem; color: var(--text-primary); cursor: pointer; }
+        .nav-toggle span { display: block; width: 22px; height: 2px; background: var(--text-primary); margin: 4px 0; transition: all 0.3s var(--ease-out); border-radius: 2px; }
+        .nav-toggle.is-open span:nth-child(1) { transform: translateY(6px) rotate(45deg); }
+        .nav-toggle.is-open span:nth-child(2) { opacity: 0; }
+        .nav-toggle.is-open span:nth-child(3) { transform: translateY(-6px) rotate(-45deg); }
+        @media (max-width: 880px) {
+            .nav-toggle { display: block; }
+            .nav-links, .nav-cta { display: none; }
+            .nav-shell.is-open .nav-links { display: flex; flex-direction: column; position: absolute; top: 100%; left: 1.25rem; right: 1.25rem; margin-top: 0.75rem; padding: 0.75rem; background: rgba(12, 12, 16, 0.95); backdrop-filter: blur(24px); border-radius: 20px; border: 1px solid var(--border-default); box-shadow: var(--shadow-lg); gap: 0.25rem; }
+            .nav-shell.is-open .nav-link { width: 100%; text-align: center; padding: 0.75rem; }
+            .nav-inner { padding: 0 1.25rem; }
+        }
+        .scroll-progress { position: fixed; top: 0; left: 0; height: 2px; width: 0; background: var(--gradient-cool); z-index: 1001; transition: width 0.1s linear; box-shadow: 0 0 8px var(--accent-glow); }
+        .page-content { padding-top: 110px; animation: pageIn 0.7s var(--ease-out); }
+        @keyframes pageIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* ===== Projetos page ===== */
+        .projects-shell { max-width: 1280px; margin: 0 auto; padding: 2rem 1.5rem 4rem; }
+        .projects-header { text-align: center; margin-bottom: 4rem; }
+        .projects-header .title { font-size: clamp(2.5rem, 6vw, 4.5rem); font-weight: 700; margin: 1.25rem 0 1rem; font-family: 'Space Grotesk', sans-serif; letter-spacing: -0.03em; }
+        .projects-header .lead { max-width: 700px; margin: 0 auto; color: var(--text-secondary); font-size: clamp(1rem, 1.6vw, 1.15rem); line-height: 1.7; }
+
+        .filter-bar { display: flex; justify-content: center; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 4rem; padding: 0.5rem; max-width: max-content; margin-left: auto; margin-right: auto; background: var(--bg-card); border: 1px solid var(--border-default); border-radius: 100px; backdrop-filter: blur(12px); }
+        .filter-btn { padding: 0.55rem 1.2rem; font-size: 0.85rem; font-weight: 500; color: var(--text-secondary); background: transparent; border: none; border-radius: 100px; cursor: none; transition: all 0.3s var(--ease-out); font-family: 'Inter', sans-serif; }
+        .filter-btn:hover { color: var(--text-primary); }
+        .filter-btn.is-active { background: var(--gradient-cool); color: #fff; box-shadow: 0 6px 16px rgba(0, 212, 255, 0.3); }
+
+        .projects-list { display: flex; flex-direction: column; gap: 4rem; }
+        .project { display: grid; grid-template-columns: 1.1fr 1fr; gap: 3rem; align-items: center; padding: 2rem; border-radius: 28px; background: var(--bg-card); border: 1px solid var(--border-default); transition: all 0.5s var(--ease-out); }
+        .project:hover { background: var(--bg-card-hover); border-color: rgba(0, 212, 255, 0.18); transform: translateY(-4px); box-shadow: var(--shadow-md); }
+        .project:nth-child(even) { grid-template-columns: 1fr 1.1fr; }
+        .project:nth-child(even) .project-media { order: 2; }
+
+        .project-media { position: relative; aspect-ratio: 4 / 3; border-radius: 20px; overflow: hidden; background: linear-gradient(135deg, rgba(0, 212, 255, 0.05), rgba(139, 92, 246, 0.05)); border: 1px solid var(--border-default); }
+        .project-media img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.7s var(--ease-out); filter: brightness(0.85) saturate(1.05); }
+        .project:hover .project-media img { transform: scale(1.05); filter: brightness(1) saturate(1.1); }
+
+        .project-year { position: absolute; top: 1rem; left: 1rem; z-index: 2; padding: 0.4rem 0.85rem; background: rgba(12, 12, 16, 0.85); backdrop-filter: blur(12px); border: 1px solid var(--border-default); border-radius: 100px; font-family: 'JetBrains Mono', monospace; font-size: 0.78rem; letter-spacing: 0.06em; color: var(--text-primary); }
+        .project-role { position: absolute; top: 1rem; right: 1rem; z-index: 2; padding: 0.4rem 0.85rem; background: var(--gradient-cool); border-radius: 100px; font-size: 0.78rem; color: #fff; font-weight: 600; box-shadow: 0 4px 12px rgba(0, 212, 255, 0.3); }
+
+        .project-body { padding: 0.5rem 0; }
+        .project-meta { display: flex; align-items: center; gap: 0.75rem; font-family: 'JetBrains Mono', monospace; font-size: 0.78rem; color: var(--accent-1); text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 1rem; }
+        .project-meta::before { content: ''; width: 24px; height: 1px; background: var(--accent-1); }
+        .project-title { font-family: 'Space Grotesk', sans-serif; font-size: clamp(1.4rem, 2.5vw, 1.85rem); font-weight: 700; margin-bottom: 1rem; line-height: 1.2; }
+        .project-summary { color: var(--text-secondary); font-size: 0.98rem; line-height: 1.75; margin-bottom: 1.5rem; }
+        .project-tech { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-bottom: 1.5rem; }
+        .tech-tag { padding: 0.35rem 0.75rem; font-size: 0.78rem; font-family: 'JetBrains Mono', monospace; color: var(--accent-1); background: rgba(0, 212, 255, 0.06); border: 1px solid rgba(0, 212, 255, 0.2); border-radius: 100px; transition: all 0.3s ease; }
+        .tech-tag:hover { background: rgba(0, 212, 255, 0.12); transform: translateY(-2px); }
+
+        .project-toggle { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.65rem 1.1rem; font-size: 0.85rem; font-weight: 600; background: transparent; border: 1px solid var(--border-strong); border-radius: 100px; color: var(--text-primary); cursor: none; transition: all 0.3s var(--ease-out); font-family: 'Inter', sans-serif; }
+        .project-toggle:hover { border-color: var(--accent-1); background: rgba(0, 212, 255, 0.06); color: var(--accent-1); }
+        .project-toggle .chev { transition: transform 0.3s var(--ease-out); }
+        .project.is-expanded .project-toggle .chev { transform: rotate(180deg); }
+
+        .project-details { display: grid; grid-template-rows: 0fr; transition: grid-template-rows 0.5s var(--ease-out); margin-top: 0; }
+        .project.is-expanded .project-details { grid-template-rows: 1fr; margin-top: 1.5rem; }
+        .project-details-inner { overflow: hidden; }
+
+        .detail-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; padding-top: 1.5rem; border-top: 1px solid var(--border-default); }
+        .detail-block { background: rgba(255, 255, 255, 0.02); border: 1px solid var(--border-subtle); border-radius: 16px; padding: 1.25rem; transition: all 0.3s ease; }
+        .detail-block:hover { border-color: rgba(0, 212, 255, 0.18); background: rgba(255, 255, 255, 0.035); }
+        .detail-label { display: flex; align-items: center; gap: 0.5rem; font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.12em; color: var(--accent-1); margin-bottom: 0.75rem; }
+        .detail-label::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--accent-1); box-shadow: 0 0 8px var(--accent-glow); }
+        .detail-content { color: var(--text-secondary); font-size: 0.9rem; line-height: 1.7; }
+
+        .empty-state { text-align: center; padding: 3rem 1rem; color: var(--text-tertiary); font-family: 'JetBrains Mono', monospace; display: none; }
+        .projects-list.is-empty .empty-state { display: block; }
+
+        /* Galeria + destaques */
+        .project-gallery { margin-top: 1.5rem; padding-top: 1.5rem; border-top: 1px solid var(--border-default); }
+        .gallery-label { font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.12em; color: var(--accent-1); margin-bottom: 0.85rem; display: flex; align-items: center; gap: 0.5rem; }
+        .gallery-label::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--accent-1); box-shadow: 0 0 8px var(--accent-glow); }
+        .gallery-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 0.85rem; }
+        .gallery-item { position: relative; aspect-ratio: 4 / 3; border-radius: 14px; overflow: hidden; border: 1px solid var(--border-default); background: rgba(255, 255, 255, 0.02); cursor: none; transition: all 0.4s var(--ease-out); }
+        .gallery-item img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s var(--ease-out); }
+        .gallery-item:hover { transform: translateY(-4px); border-color: rgba(0, 212, 255, 0.3); box-shadow: var(--shadow-md); }
+        .gallery-item:hover img { transform: scale(1.06); }
+
+        .project-highlights { margin-top: 1.5rem; display: grid; gap: 0.65rem; }
+        .highlight-pill { display: inline-flex; align-items: center; gap: 0.65rem; padding: 0.7rem 1rem; background: linear-gradient(135deg, rgba(245, 158, 11, 0.08), rgba(0, 212, 255, 0.05)); border: 1px solid rgba(245, 158, 11, 0.25); border-radius: 14px; font-size: 0.88rem; color: var(--text-primary); font-weight: 500; }
+        .highlight-pill .pill-icon { width: 28px; height: 28px; border-radius: 8px; background: linear-gradient(135deg, #f59e0b, #ef4444); display: inline-flex; align-items: center; justify-content: center; color: #fff; flex-shrink: 0; }
+
+        /* Lightbox */
+        .lightbox { position: fixed; inset: 0; background: rgba(5, 5, 7, 0.95); backdrop-filter: blur(20px); z-index: 1100; display: none; align-items: center; justify-content: center; padding: 4rem 2rem; animation: fadeIn 0.3s ease-out; }
+        .lightbox.is-open { display: flex; }
+        .lightbox img { max-width: 100%; max-height: 100%; border-radius: 16px; box-shadow: var(--shadow-lg); animation: scaleIn 0.4s var(--ease-out); }
+        .lightbox-close { position: absolute; top: 1.5rem; right: 1.5rem; width: 48px; height: 48px; border-radius: 50%; background: rgba(255, 255, 255, 0.1); border: 1px solid var(--border-default); color: #fff; cursor: none; display: inline-flex; align-items: center; justify-content: center; transition: all 0.3s var(--ease-out); }
+        .lightbox-close:hover { background: rgba(0, 212, 255, 0.15); border-color: var(--accent-1); transform: rotate(90deg); }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes scaleIn { from { transform: scale(0.92); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+
+        @media (max-width: 900px) {
+            .project, .project:nth-child(even) { grid-template-columns: 1fr; gap: 1.5rem; }
+            .project:nth-child(even) .project-media { order: 0; }
+            .detail-grid { grid-template-columns: 1fr; }
+        }
+        @media (max-width: 500px) { .project { padding: 1rem; } }
+    </style>
+</head>
+<body>
+    <div class="cursor-dot" id="cursor-dot"></div>
+    <div class="cursor-ring" id="cursor-ring"></div>
+    <div class="scroll-progress" id="scroll-progress"></div>
+    <canvas id="particles-canvas" class="particles"></canvas>
+
+    <nav class="nav-shell" id="nav-shell">
+        <div class="nav-inner">
+            <a class="nav-brand magnetic" href="index.html" data-cursor="hover">
+                <span class="nav-brand-mark">JM</span>
+                <span class="nav-brand-text">Jonas Miguel<span>// Full Stack</span></span>
+            </a>
+            <button class="nav-toggle" id="nav-toggle" aria-label="Menu"><span></span><span></span><span></span></button>
+            <ul class="nav-links" id="nav-links">
+                <li><a class="nav-link" href="index.html" data-cursor="hover">Apresentação</a></li>
+                <li><a class="nav-link" href="projetos.html" data-cursor="hover">Projetos</a></li>
+                <li><a class="nav-link" href="atuacao.html" data-cursor="hover">Atuação</a></li>
+            </ul>
+            <a class="nav-cta magnetic" href="https://www.linkedin.com/in/jonas-miguel-ol/" target="_blank" rel="noopener" data-cursor="hover">
+                Contato
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+            </a>
+        </div>
+    </nav>
+
+    <main class="content page-content">
+        <div class="projects-shell">
+            <header class="projects-header" data-reveal>
+                <span class="eyebrow">Portfólio · 2023 — 2026</span>
+                <h1 class="title gradient-text">Projetos API</h1>
+                <p class="lead">Seis semestres de Atividades Práticas Integradoras (API) com clientes reais. Cada projeto representa uma stack diferente, um papel diferente e uma evolução real como desenvolvedor.</p>
+            </header>
+
+            <div class="filter-bar" data-reveal>
+                <button class="filter-btn is-active" data-filter="all" data-cursor="hover">Todos</button>
+                <button class="filter-btn" data-filter="2023" data-cursor="hover">2023</button>
+                <button class="filter-btn" data-filter="2024" data-cursor="hover">2024</button>
+                <button class="filter-btn" data-filter="2025" data-cursor="hover">2025</button>
+                <button class="filter-btn" data-filter="2026" data-cursor="hover">2026</button>
+                <button class="filter-btn" data-filter="po" data-cursor="hover">Product Owner</button>
+                <button class="filter-btn" data-filter="full" data-cursor="hover">Full Stack</button>
+            </div>
+
+            <div class="projects-list" id="projects-list">
+
+                <!-- 1DSM -->
+                <article class="project" data-tags="2023 full" data-reveal data-reveal-delay="1">
+                    <div class="project-media">
+                        <span class="project-year">2023 · 1º DSM</span>
+                        <span class="project-role">Full Stack</span>
+                        <img src="assets/img/api.jpeg" alt="Projeto API 1DSM">
+                    </div>
+                    <div class="project-body">
+                        <div class="project-meta">2023 · Full Stack</div>
+                        <h2 class="project-title">Projeto API 1DSM — segundo semestre de 2023</h2>
+                        <p class="project-summary">A aplicação foi desenvolvida para fornecer informações sobre hospitais no Brasil que atendem crianças com problemas renais crônicos. Permite consultar nome, endereço, telefone e especialidades de cada hospital, além de filtrar por localização. A plataforma também inclui um fórum de discussões com chat ao vivo…</p>
+                        <div class="project-tech">
+                            <span class="tech-tag">Python</span><span class="tech-tag">Flask</span><span class="tech-tag">Docker</span><span class="tech-tag">AWS</span><span class="tech-tag">MySQL</span><span class="tech-tag">JavaScript</span>
+                        </div>
+                        <button class="project-toggle" data-cursor="hover" type="button">
+                            <span class="toggle-text">Ver detalhes completos</span>
+                            <svg class="chev" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+                        </button>
+                        <div class="project-details">
+                            <div class="project-details-inner">
+                                <div class="detail-grid">
+                                    <div class="detail-block"><div class="detail-label">Descrição completa</div><div class="detail-content">A aplicação foi desenvolvida para fornecer informações sobre hospitais no Brasil que atendem crianças com problemas renais crônicos. Ela permite que os usuários consultem dados como nome, endereço, telefone e especialidades de cada hospital, além de filtrar por localização e especialização. A plataforma também inclui um fórum de discussões, com chat ao vivo e a possibilidade de envio de imagens com comentários, facilitando a troca de informações entre pacientes, familiares e profissionais de saúde. Para garantir a segurança, há moderação de conteúdo e controles de privacidade, além de autenticação para acesso às funcionalidades.</div></div>
+                                    <div class="detail-block"><div class="detail-label">Contribuições pessoais</div><div class="detail-content">Foco na otimização de processos e equilíbrio das cargas de trabalho para garantir a melhor performance da aplicação, mesmo com requisitos de hardware limitados. Melhoria contínua na estrutura de codificação e integração dos módulos, para uma comunicação eficiente e escalável — crucial para o chat e o envio de imagens em tempo real.</div></div>
+                                    <div class="detail-block"><div class="detail-label">Hard skills</div><div class="detail-content">Python, CSS, HTML, JavaScript, Docker, MySQL, Flask</div></div>
+                                    <div class="detail-block"><div class="detail-label">Soft skills</div><div class="detail-content">Autonomia e adaptação. O processo de otimizar a infraestrutura e garantir a disponibilidade da plataforma em diferentes cenários demandou grande capacidade de adaptação e tomada de decisões de forma independente, especialmente quando os requisitos de performance eram desafiadores.</div></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- 2DSM -->
+                <article class="project" data-tags="2024 full" data-reveal data-reveal-delay="2">
+                    <div class="project-media">
+                        <span class="project-year">2024 · 2º DSM</span>
+                        <span class="project-role">Full Stack</span>
+                        <img src="assets/img/Api2024.png" alt="Projeto API 2DSM">
+                    </div>
+                    <div class="project-body">
+                        <div class="project-meta">2024 · Full Stack</div>
+                        <h2 class="project-title">Projeto API 2DSM — primeiro semestre de 2024</h2>
+                        <p class="project-summary">O projeto API 2DSM foi desenvolvido com o objetivo de criar uma plataforma de atendimento ao cliente, focada em um sistema de gestão de tickets e chat em tempo real. Utilizando React no frontend, a aplicação oferece três tipos de acesso: Cliente, Atendente e Administrador…</p>
+                        <div class="project-tech">
+                            <span class="tech-tag">Node.js</span><span class="tech-tag">React</span><span class="tech-tag">HTML</span><span class="tech-tag">CSS</span><span class="tech-tag">MySQL</span><span class="tech-tag">JavaScript</span><span class="tech-tag">Bootstrap</span>
+                        </div>
+                        <button class="project-toggle" data-cursor="hover" type="button">
+                            <span class="toggle-text">Ver detalhes completos</span>
+                            <svg class="chev" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+                        </button>
+                        <div class="project-details">
+                            <div class="project-details-inner">
+                                <div class="detail-grid">
+                                    <div class="detail-block"><div class="detail-label">Descrição completa</div><div class="detail-content">Plataforma de atendimento ao cliente focada em sistema de gestão de tickets e chat em tempo real. Utilizando React no frontend, a aplicação oferece três tipos de acesso: Cliente, Atendente e Administrador. A interface foi construída para ser intuitiva e responsiva, utilizando HTML, CSS e Bootstrap. No backend, o sistema foi implementado com Node.js, garantindo a manipulação eficiente de requisições e comunicação com o banco de dados MySQL.</div></div>
+                                    <div class="detail-block"><div class="detail-label">Contribuições pessoais</div><div class="detail-content">Foco na criação de uma experiência de usuário fluida e eficiente, utilizando React para garantir uma interface interativa e com desempenho otimizado. Implementação do sistema de tickets e chat, essenciais para a comunicação eficaz entre clientes e atendentes. Escolha de Node.js para o backend, garantindo respostas rápidas e escaláveis.</div></div>
+                                    <div class="detail-block"><div class="detail-label">Hard skills</div><div class="detail-content">Node.js, React, HTML, CSS, JavaScript, MySQL, Bootstrap</div></div>
+                                    <div class="detail-block"><div class="detail-label">Soft skills</div><div class="detail-content">Trabalho em equipe e gestão de tempo. Capacidade de colaborar eficientemente com outros membros da equipe, mantendo o foco nas prioridades e gerenciando o tempo para cumprir os prazos.</div></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- 3DSM -->
+                <article class="project" data-tags="2024 full" data-reveal data-reveal-delay="3">
+                    <div class="project-media">
+                        <span class="project-year">2024 · 3º DSM</span>
+                        <span class="project-role">Backend</span>
+                        <img src="assets/img/projeto3dsm.png" alt="Projeto API 3DSM">
+                    </div>
+                    <div class="project-body">
+                        <div class="project-meta">2024 · Backend</div>
+                        <h2 class="project-title">Projeto API 3DSM — segundo semestre de 2024</h2>
+                        <p class="project-summary">O Projeto API 3DSM foi desenvolvido para o cliente AFAPG com o objetivo de criar um portal de transparência, onde são exibidos detalhadamente os gastos realizados com doações empresariais em projetos sociais. Utilizando o framework Spring no backend com Java…</p>
+                        <div class="project-tech">
+                            <span class="tech-tag">Java</span><span class="tech-tag">Spring</span><span class="tech-tag">React</span><span class="tech-tag">MySQL</span><span class="tech-tag">JWT</span>
+                        </div>
+                        <button class="project-toggle" data-cursor="hover" type="button">
+                            <span class="toggle-text">Ver detalhes completos</span>
+                            <svg class="chev" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+                        </button>
+                        <div class="project-details">
+                            <div class="project-details-inner">
+                                <div class="detail-grid">
+                                    <div class="detail-block"><div class="detail-label">Descrição completa</div><div class="detail-content">Portal de transparência para o cliente AFAPG, onde são exibidos detalhadamente os gastos realizados com doações empresariais em projetos sociais. Backend em Java/Spring com segurança e escalabilidade, frontend em React e banco MySQL. Autenticação via JWT garantindo que apenas usuários autorizados acessem dados sensíveis.</div></div>
+                                    <div class="detail-block"><div class="detail-label">Contribuições pessoais</div><div class="detail-content">Foco na criação de uma aplicação escalável e segura. Implementação do backend com Java e Spring, criando uma estrutura robusta para gerenciamento e exposição de dados financeiros. Integração com MySQL para armazenamento estruturado e JWT para controle de acesso.</div></div>
+                                    <div class="detail-block"><div class="detail-label">Hard skills</div><div class="detail-content">Java, Spring, React, MySQL, JWT</div></div>
+                                    <div class="detail-block"><div class="detail-label">Soft skills</div><div class="detail-content">Responsabilidade e foco em resultados. A criação de um portal de transparência exigiu grande atenção aos detalhes e a capacidade de assumir responsabilidades para garantir que as informações fossem apresentadas de forma clara, precisa e segura.</div></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- 4DSM -->
+                <article class="project" data-tags="2025 full" data-reveal data-reveal-delay="1">
+                    <div class="project-media">
+                        <span class="project-year">2025 · 4º DSM</span>
+                        <span class="project-role">Full Stack + IoT</span>
+                        <img src="assets/img/tecsus-2.png" alt="Projeto API 4DSM Tecsus">
+                    </div>
+                    <div class="project-body">
+                        <div class="project-meta">2025 · Full Stack + IoT</div>
+                        <h2 class="project-title">Projeto API 4DSM — primeiro semestre de 2025</h2>
+                        <p class="project-summary">Desenvolvido por alunos do 4º semestre de DSM para o cliente Tecsus, este projeto realiza a coleta e processamento de dados de Estações Meteorológicas. O sistema permite inserção e busca de dados, além da exibição de estatísticas em gráficos interativos…</p>
+                        <div class="project-tech">
+                            <span class="tech-tag">React</span><span class="tech-tag">Node.js</span><span class="tech-tag">TypeScript</span><span class="tech-tag">PostgreSQL</span><span class="tech-tag">Docker</span><span class="tech-tag">IoT</span>
+                        </div>
+                        <button class="project-toggle" data-cursor="hover" type="button">
+                            <span class="toggle-text">Ver detalhes completos</span>
+                            <svg class="chev" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+                        </button>
+                        <div class="project-details">
+                            <div class="project-details-inner">
+                                <div class="detail-grid">
+                                    <div class="detail-block"><div class="detail-label">Descrição completa</div><div class="detail-content">Coleta e processamento de dados de Estações Meteorológicas para a Tecsus. Atende à demanda de monitoramento ambiental, utilizando sensores de baixo custo para medir vento, chuva, umidade, temperatura e pressão. Os dados são transmitidos para um servidor e exibidos em um portal com dashboards e relatórios.</div></div>
+                                    <div class="detail-block"><div class="detail-label">Contribuições pessoais</div><div class="detail-content">Contribuição na arquitetura do sistema de coleta e processamento de dados meteorológicos. Trabalho na integração dos sensores IoT com o backend, garantindo a transmissão confiável e em tempo real. Implementação de APIs RESTful e desenvolvimento de dashboards interativos com React.</div></div>
+                                    <div class="detail-block"><div class="detail-label">Hard skills</div><div class="detail-content">React, Node.js, TypeScript, PostgreSQL, Docker, IoT, APIs RESTful, Data Visualization</div></div>
+                                    <div class="detail-block"><div class="detail-label">Soft skills</div><div class="detail-content">Trabalho em equipe e resolução de problemas. Colaboração estreita entre hardware, backend e frontend. A experiência com cliente real (Tecsus) aprimorou habilidades de gestão de expectativas e apresentação de resultados.</div></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- 5DSM -->
+                <article class="project" data-tags="2025 po" data-reveal data-reveal-delay="2">
+                    <div class="project-media">
+                        <span class="project-year">2025 · 5º DSM</span>
+                        <span class="project-role">Product Owner</span>
+                        <img src="assets/img/guarnicao-web.png" alt="Projeto API 5DSM Guarnição">
+                    </div>
+                    <div class="project-body">
+                        <div class="project-meta">2025 · Product Owner</div>
+                        <h2 class="project-title">Projeto API 5DSM — Sistema da Guarnição de Caçapava</h2>
+                        <p class="project-summary">Sistema de Gestão Administrativa desenvolvido para a Guarnição de Caçapava com interfaces web e mobile. Digitaliza e automatiza a gestão de almoxarifado — controle em tempo real de estoque, histórico de movimentações, requisições, fornecedores, ordens de compra e relatórios. Apresentado para General, Coronel e Tenentes da guarnição…</p>
+                        <div class="project-tech">
+                            <span class="tech-tag">Flutter</span><span class="tech-tag">Dart</span><span class="tech-tag">Vue.js</span><span class="tech-tag">PostgreSQL</span><span class="tech-tag">Java</span><span class="tech-tag">Python</span><span class="tech-tag">Git</span>
+                        </div>
+                        <div class="project-highlights">
+                            <span class="highlight-pill"><span class="pill-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>Projeto escolhido para implantação oficial no Exército Brasileiro</span>
+                            <span class="highlight-pill"><span class="pill-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>Apresentação direta para General, Coronel e Tenentes da guarnição</span>
+                            <span class="highlight-pill"><span class="pill-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>Recebimento de medalha de honra da unidade como reconhecimento</span>
+                            <span class="highlight-pill"><span class="pill-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>Interfaces web e mobile integradas</span>
+                        </div>
+                        <button class="project-toggle" data-cursor="hover" type="button">
+                            <span class="toggle-text">Ver detalhes completos</span>
+                            <svg class="chev" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+                        </button>
+                        <div class="project-details">
+                            <div class="project-details-inner">
+                                <div class="detail-grid">
+                                    <div class="detail-block"><div class="detail-label">Descrição completa</div><div class="detail-content">Sistema de Gestão Administrativa desenvolvido para a Guarnição de Caçapava com interfaces web e mobile. Projeto acadêmico realizado por alunos do 5º semestre de DSM com o objetivo de digitalizar e automatizar a gestão de almoxarifado, substituindo controles manuais e descentralizados que dificultavam o rastreamento de itens. A solução oferece controle em tempo real de estoque, histórico de movimentações, gestão de requisições, fornecedores, ordens de compra, validades e relatórios gerenciais. O projeto foi apresentado diretamente para o General, Coronel e Tenentes da guarnição e foi escolhido para ser implantado oficialmente no Exército Brasileiro. Como reconhecimento pela contribuição, fui condecorado com a medalha de honra da unidade.</div></div>
+                                    <div class="detail-block"><div class="detail-label">Product Owner</div><div class="detail-content">Como Product Owner, minha responsabilidade foi garantir o alinhamento entre as necessidades da Guarnição de Caçapava e a solução desenvolvida pela equipe. Conduzi o levantamento de requisitos junto aos stakeholders militares, priorizei o backlog do produto e defini as funcionalidades essenciais para cada sprint. Apresentei o projeto diretamente ao General, Coronel e Tenentes em sessão de avaliação. O reconhecimento veio com a escolha do sistema para implantação oficial no Exército Brasileiro e com a entrega da medalha de honra da unidade.</div></div>
+                                    <div class="detail-block"><div class="detail-label">Hard skills</div><div class="detail-content">Gestão de Produto, Metodologias Ágeis, Scrum, Levantamento de Requisitos, Priorização de Backlog, User Stories, Apresentação Executiva, Flutter, Vue.js, PostgreSQL</div></div>
+                                    <div class="detail-block"><div class="detail-label">Soft skills</div><div class="detail-content">Liderança, visão estratégica e comunicação executiva. Capacidade de liderar sem autoridade formal e de apresentar resultados a stakeholders de alto escalão (General, Coronel, Tenentes). A gestão de stakeholders militares exigiu negociação avançada, postura e clareza.</div></div>
+                                </div>
+                                <div class="project-gallery">
+                                    <div class="gallery-label">Galeria</div>
+                                    <div class="gallery-grid">
+                                        <div class="gallery-item" data-cursor="hover" data-lightbox="assets/img/guarnicao-web.png"><img src="assets/img/guarnicao-web.png" alt="Interface web"></div>
+                                        <div class="gallery-item" data-cursor="hover" data-lightbox="assets/img/guarnicao-mobile.png"><img src="assets/img/guarnicao-mobile.png" alt="Interface mobile"></div>
+                                        <div class="gallery-item" data-cursor="hover" data-lightbox="assets/img/guarnicao-apresentacao.png"><img src="assets/img/guarnicao-apresentacao.png" alt="Apresentação para a guarnição"></div>
+                                        <div class="gallery-item" data-cursor="hover" data-lightbox="assets/img/guarnicao-medalha.png"><img src="assets/img/guarnicao-medalha.png" alt="Medalha de honra"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- 6DSM -->
+                <article class="project" data-tags="2026 full" data-reveal data-reveal-delay="3">
+                    <div class="project-media">
+                        <span class="project-year">2026 · 6º DSM</span>
+                        <span class="project-role">Full Stack</span>
+                        <img src="assets/img/atlas.png" alt="Projeto API 6DSM Atlas">
+                    </div>
+                    <div class="project-body">
+                        <div class="project-meta">2026 · Full Stack</div>
+                        <h2 class="project-title">Projeto API 6DSM — Atlas (Visiona)</h2>
+                        <p class="project-summary">Sistema desenvolvido para a empresa Visiona — Atlas é um chatbot com Processamento de Linguagem Natural (PLN) que atende em linguagem humana e está conectado a dados geoespaciais oficiais. Para qualquer pergunta sobre queimadas, desmatamento, áreas rurais e outros indicadores territoriais, o chat retorna o mapa do estado de São Paulo com todas as informações relevantes…</p>
+                        <div class="project-tech">
+                            <span class="tech-tag">Python</span><span class="tech-tag">FastAPI</span><span class="tech-tag">SQLAlchemy</span><span class="tech-tag">Alembic</span><span class="tech-tag">Pydantic</span><span class="tech-tag">PostgreSQL</span><span class="tech-tag">PostGIS</span><span class="tech-tag">pgvector</span><span class="tech-tag">GeoServer</span><span class="tech-tag">QGIS</span><span class="tech-tag">React</span>
+                        </div>
+                        <div class="project-highlights">
+                            <span class="highlight-pill"><span class="pill-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>Chatbot com PLN integrado a dados geoespaciais oficiais</span>
+                            <span class="highlight-pill"><span class="pill-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>Mapa do estado de SP com polígonos, IDs e registros completos</span>
+                            <span class="highlight-pill"><span class="pill-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>Integração com QGIS para análise por especialistas</span>
+                            <span class="highlight-pill"><span class="pill-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>Stack moderno: FastAPI + PostGIS + pgvector + GeoServer + React</span>
+                        </div>
+                        <button class="project-toggle" data-cursor="hover" type="button">
+                            <span class="toggle-text">Ver detalhes completos</span>
+                            <svg class="chev" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+                        </button>
+                        <div class="project-details">
+                            <div class="project-details-inner">
+                                <div class="detail-grid">
+                                    <div class="detail-block"><div class="detail-label">Descrição completa</div><div class="detail-content">Sistema desenvolvido para a empresa Visiona — Atlas é um chatbot com Processamento de Linguagem Natural (PLN) que atende em linguagem humana e está conectado a dados geoespaciais oficiais. Para qualquer pergunta sobre queimadas, desmatamento, áreas rurais e outros indicadores territoriais, o chat retorna o mapa do estado de São Paulo com todas as informações relevantes — áreas delimitadas por polígonos, ID de cada região e o registro completo dos sites oficiais geoespaciais. O sistema também se integra ao QGIS, fornecendo dados estruturados para consulta e análise por especialistas. O Atlas combina LLMs, busca semântica via embeddings (pgvector) e dados espaciais (PostGIS / GeoServer) numa única interface conversacional.</div></div>
+                                    <div class="detail-block"><div class="detail-label">Contribuições pessoais</div><div class="detail-content">Atuo como desenvolvedor Full Stack no projeto, contribuindo na arquitetura do backend em Python/FastAPI, modelagem do banco com SQLAlchemy + Alembic, integração com PostGIS e pgvector para busca espacial e semântica, configuração do GeoServer para servir camadas geoespaciais e construção da interface conversacional em React. Trabalho também na ingestão e tratamento dos dados oficiais de fontes geoespaciais.</div></div>
+                                    <div class="detail-block"><div class="detail-label">Hard skills</div><div class="detail-content">Python, FastAPI, SQLAlchemy, Alembic, Pydantic, PostgreSQL, PostGIS, pgvector, GeoServer, QGIS, React, PLN, LLMs, Embeddings, GIS</div></div>
+                                    <div class="detail-block"><div class="detail-label">Soft skills</div><div class="detail-content">Pensamento sistêmico e aprendizado contínuo. Trabalhar com dados geoespaciais e LLMs simultaneamente exige a capacidade de transitar entre domínios distintos (GIS, IA, engenharia de dados, frontend) e manter a visão do todo. A interlocução com a Visiona — empresa especializada no setor espacial — exigiu rigor técnico, comunicação precisa e disciplina.</div></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+
+                <div class="empty-state">Nenhum projeto encontrado para este filtro.</div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Lightbox -->
+    <div class="lightbox" id="lightbox" data-cursor="hover">
+        <button class="lightbox-close" id="lightbox-close" aria-label="Fechar" data-cursor="hover">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+        <img id="lightbox-img" src="" alt="">
+    </div>
+
+    <footer class="footer">
+        <div style="max-width: 600px; margin: 0 auto;">
+            <h3 style="font-size: 1.5rem; margin-bottom: 0.5rem;" class="gradient-text">Vamos construir algo juntos</h3>
+            <p class="footer-tagline">Aberto para colaborações, freelas e oportunidades. Entre em contato pelos canais abaixo.</p>
+            <div class="social-icons">
+                <a href="https://www.instagram.com/jonaasmiguel/" target="_blank" rel="noopener" aria-label="Instagram" data-cursor="hover"><img src="assets/img/insta.png" alt=""></a>
+                <a href="https://github.com/Jonasoliver" target="_blank" rel="noopener" aria-label="GitHub" data-cursor="hover"><img src="assets/img/git.png" alt=""></a>
+                <a href="https://www.linkedin.com/in/jonas-miguel-ol/" target="_blank" rel="noopener" aria-label="LinkedIn" data-cursor="hover"><img src="assets/img/linked.png" alt=""></a>
+            </div>
+            <p class="footer-meta">© 2026 Jonas Miguel Oliveira · Fatec São José dos Campos · DSM</p>
+        </div>
+    </footer>
+
+    <script src="assets/js/main.js"></script>
+</body>
+</html>

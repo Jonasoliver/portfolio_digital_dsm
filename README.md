@@ -1,58 +1,81 @@
-# Bem-vindo ao meu portfólio
-## Autor: Jonas Miguel de Oliveira
-<p align= "center">
-<img src="./api/static/eu.jpg" width= "auto" height= "250" alt= "minha foto">
+# Portfólio Digital — Jonas Miguel Oliveira
+
+**Curso:** Desenvolvimento de Software Multiplataforma (DSM)
+**Instituição:** Fatec Jessen Vidal — São José dos Campos
+**Semestre atual:** 6º DSM (2026/01)
+
+<p align="center">
+  <img src="./api/static/eu.jpg" width="auto" height="250" alt="Jonas Miguel">
 </p>
 
-## Visite o meu portfólio por este link:
-https://portfolio-digital-dsm-2sem.vercel.app/
- 
+Portfólio acadêmico-profissional que reúne minha apresentação pessoal, projetos API
+desenvolvidos ao longo dos seis semestres do curso de DSM e as áreas em que atuo.
+
+## Estrutura do portfólio (3 seções)
+
+Conforme orientações do professor (máximo 3 seções):
+
+1. **Apresentação Pessoal** (`/`) — quem sou, foto profissional, stack, jornada e soft skills.
+2. **Projetos API** (`/projetos`) — todos os projetos das Atividades Práticas Integradoras (1º ao 6º semestre).
+3. **Áreas de Atuação** (`/atuacao`) — áreas em que atuo profissionalmente e canais de contato.
+
 ## Tecnologias
 
-As tecnologias que foram utilizadas são:
-* HTML: uma linguagem de marcação utilizada na construção de páginas na Web. Documentos HTML podem ser interpretados por navegadores. <img src="./api/static/html.png" width= "27" height= "27" alt= "html foto">
-* CSS: mecanismo para adicionar estilos a uma página web, aplicado diretamente nas tags HTML ou ficar contido dentro das tags <style>. <img src="./api/static/css.png" width= "27" height= "27" alt= "css foto">
-* Python:  uma linguagem de programação de alto nível, interpretada de script, imperativa, orientada a objetos, funcional, de tipagem dinâmica e forte. <img src="./api/static/python.png" width= "27" height= "27" alt= "css foto">
-* Flask:  é um pequeno framework web escrito em Python. <img src="./api/static/flask.png" width= "32" height= "32" alt= "css foto">
+- **Backend:** Python + Flask (renderização de templates Jinja com dados estáticos)
+- **Frontend:** HTML5, CSS3, JavaScript vanilla
+- **Fontes:** Inter, Space Grotesk, JetBrains Mono (self-hosted em `api/static/fonts/`)
+- **Sem CDN externo** — todas as dependências armazenadas no repositório
 
-## Descrição das pastas e arquivos
+## Como executar localmente
 
-1. mgt: arquivo pdf do portfolio feito no figma
-2. api: código-fonte do projeto
-3. static: imagens e css do projeto
-4. templates: html do projeto
-5. vercel.json: Arquivo de configuração do vercel
+```powershell
+# 1. Criar e ativar ambiente virtual
+python -m venv venv
+.\venv\Scripts\activate
 
-## Como utilizar o diretório
+# 2. Instalar dependências
+pip install -r requirements.txt
 
-Como construir e executar o projeto (Windows / prompt de comandos):
-1. Criar uma pasta vazia
-2. Clonar o repositório com: 
-```console
-	git clone https://github.com/Jonasoliver/portfolio_digital_dsm.git  .
+# 3. Rodar o servidor
+cd api
+python app.py
 ```
-3. Abrir a pasta raiz
-4. Com o terminal aberto na pasta raiz, digitar:
-- Python -m venv venv
-5. Após a criação da pasta venv, digitar:
-- .\venv\Scripts\activate
-6. Já dentro da pasta venv digitar o código:
-- pip install flask
-7. Geralmente o arquivo requirements.txt vem automaticamente após instalar o Flask, caso isso não aconteça execute o passo 8
-8. Digitar no terminal:
- - pip install -r ./requirements.txt
-9. Após executar estes passos digitar:
-- cd ./api
-11. Já dentro da pasta src, onde se encontra o app.py, digitar:
-- flask run ou python app.py
-12. Acessar o link segurando a tecla Ctrl e clicando com o botão esquerdo do mouse
-## Como iniciar o seu projeto
 
-1. Ter um computador.
-2. Utilizar o terminal ou caso prefira, instalar uma ferramenta de desenvolvimento web. Aperte [aqui](https://www.hostinger.com.br/tutoriais/ferramentas-de-desenvolvimento-web) para acessar um link onde exibe-se algumas ferramentas desse tipo.
-## Como fazer deploy no vercel
-1. Baixe em seu compudador o node, caso ainda não o possua, baixe-o aqui [node.js](https://nodejs.org/en)
-2. Na pasta raiz do projeto, abra o terminal  (npm install -g vercel)
-3. Após a instalação digite no terminal (vercel), dê um nome para a pasta e suba para o vercel.
-<br>
-(Validação professor FGMC - 1DSM - 2023-02)
+Acesse em `http://localhost:5000`.
+
+## Estrutura de pastas
+
+```
+portfolio_digital_dsm/
+├── api/
+│   ├── app.py                  Flask + dados estáticos
+│   ├── static/
+│   │   ├── style.css           Design system (sem CDN)
+│   │   ├── fonts/              Fontes self-hosted (woff2)
+│   │   └── *.png / *.jpg       Imagens dos projetos e perfil
+│   └── templates/
+│       ├── base.html           Layout (navbar, footer, cursor, partículas)
+│       ├── apresentacao.html   1ª seção — Apresentação Pessoal
+│       ├── projetos.html       2ª seção — Projetos API
+│       └── atuacao.html        3ª seção — Áreas de Atuação + Contato
+├── mgt/
+│   └── FIGMA.pdf               Mockup original
+├── requirements.txt
+├── vercel.json                 Deploy Vercel
+└── README.md
+```
+
+## Conformidade com requisitos do professor
+
+- ✅ Máximo 3 seções (Apresentação, Projetos, Atuação)
+- ✅ Foto profissional na apresentação pessoal
+- ✅ Inclusão dos projetos API (1º ao 6º semestre)
+- ✅ Dependências armazenadas localmente no repositório (fontes WOFF2 self-hosted)
+- ✅ Dados estáticos no próprio repositório (lista Python no `app.py`)
+- ✅ Sem links externos para CDN
+
+## Contato
+
+- **Email:** jonaasmigueldeoliveira@gmail.com
+- **LinkedIn:** [jonas-miguel-ol](https://www.linkedin.com/in/jonas-miguel-ol/)
+- **GitHub:** [Jonasoliver](https://github.com/Jonasoliver)

@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 
-{% block title %}Projetos — Jonas Miguel Oliveira{% endblock %}
+{% block title %}Projetos — {{ perfil.nome }}{% endblock %}
 
 {% block content %}
 <style>
@@ -10,13 +10,7 @@
         padding: 2rem 1.5rem 4rem;
     }
 
-    /* =====================================================
-       Header
-       ===================================================== */
-    .projects-header {
-        text-align: center;
-        margin-bottom: 4rem;
-    }
+    .projects-header { text-align: center; margin-bottom: 4rem; }
 
     .projects-header .title {
         font-size: clamp(2.5rem, 6vw, 4.5rem);
@@ -34,9 +28,7 @@
         line-height: 1.7;
     }
 
-    /* =====================================================
-       Filters
-       ===================================================== */
+    /* Filters */
     .filter-bar {
         display: flex;
         justify-content: center;
@@ -74,14 +66,8 @@
         box-shadow: 0 6px 16px rgba(0, 212, 255, 0.3);
     }
 
-    /* =====================================================
-       Project list
-       ===================================================== */
-    .projects-list {
-        display: flex;
-        flex-direction: column;
-        gap: 4rem;
-    }
+    /* Project list */
+    .projects-list { display: flex; flex-direction: column; gap: 4rem; }
 
     .project {
         display: grid;
@@ -102,13 +88,9 @@
         box-shadow: var(--shadow-md);
     }
 
-    .project:nth-child(even) {
-        grid-template-columns: 1fr 1.1fr;
-    }
-
+    .project:nth-child(even) { grid-template-columns: 1fr 1.1fr; }
     .project:nth-child(even) .project-media { order: 2; }
 
-    /* Media */
     .project-media {
         position: relative;
         aspect-ratio: 4 / 3;
@@ -130,18 +112,6 @@
         transform: scale(1.05);
         filter: brightness(1) saturate(1.1);
     }
-
-    .project-media::after {
-        content: '';
-        position: absolute;
-        inset: 0;
-        background: linear-gradient(135deg, transparent 60%, rgba(0, 212, 255, 0.08) 100%);
-        pointer-events: none;
-        opacity: 0;
-        transition: opacity 0.4s ease;
-    }
-
-    .project:hover .project-media::after { opacity: 1; }
 
     .project-year {
         position: absolute;
@@ -173,7 +143,11 @@
         box-shadow: 0 4px 12px rgba(0, 212, 255, 0.3);
     }
 
-    /* Content */
+    .project-role.is-wip {
+        background: linear-gradient(135deg, #f59e0b, #ef4444);
+        box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+    }
+
     .project-body { padding: 0.5rem 0; }
 
     .project-meta {
@@ -233,7 +207,6 @@
         transform: translateY(-2px);
     }
 
-    /* Expandable details */
     .project-toggle {
         display: inline-flex;
         align-items: center;
@@ -260,9 +233,7 @@
         transition: transform 0.3s var(--ease-out);
     }
 
-    .project.is-expanded .project-toggle .chev {
-        transform: rotate(180deg);
-    }
+    .project.is-expanded .project-toggle .chev { transform: rotate(180deg); }
 
     .project-details {
         display: grid;
@@ -276,9 +247,7 @@
         margin-top: 1.5rem;
     }
 
-    .project-details-inner {
-        overflow: hidden;
-    }
+    .project-details-inner { overflow: hidden; }
 
     .detail-grid {
         display: grid;
@@ -328,9 +297,6 @@
         line-height: 1.7;
     }
 
-    /* =====================================================
-       Empty state
-       ===================================================== */
     .empty-state {
         text-align: center;
         padding: 3rem 1rem;
@@ -341,9 +307,176 @@
 
     .projects-list.is-empty .empty-state { display: block; }
 
+    /* Em andamento */
+    .project.is-wip {
+        background: linear-gradient(135deg, rgba(245, 158, 11, 0.04), rgba(239, 68, 68, 0.04));
+        border-color: rgba(245, 158, 11, 0.18);
+    }
+
+    .project.is-wip .project-media {
+        background: linear-gradient(135deg, rgba(245, 158, 11, 0.08), rgba(139, 92, 246, 0.08));
+    }
+
     /* =====================================================
-       Responsive
+       Galeria de imagens (multi-image)
        ===================================================== */
+    .project-gallery {
+        margin-top: 1.5rem;
+        padding-top: 1.5rem;
+        border-top: 1px solid var(--border-default);
+    }
+
+    .gallery-label {
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.12em;
+        color: var(--accent-1);
+        margin-bottom: 0.85rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .gallery-label::before {
+        content: '';
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: var(--accent-1);
+        box-shadow: 0 0 8px var(--accent-glow);
+    }
+
+    .gallery-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        gap: 0.85rem;
+    }
+
+    .gallery-item {
+        position: relative;
+        aspect-ratio: 4 / 3;
+        border-radius: 14px;
+        overflow: hidden;
+        border: 1px solid var(--border-default);
+        background: rgba(255, 255, 255, 0.02);
+        cursor: none;
+        transition: all 0.4s var(--ease-out);
+    }
+
+    .gallery-item img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.5s var(--ease-out);
+    }
+
+    .gallery-item:hover {
+        transform: translateY(-4px);
+        border-color: rgba(0, 212, 255, 0.3);
+        box-shadow: var(--shadow-md);
+    }
+
+    .gallery-item:hover img { transform: scale(1.06); }
+
+    .gallery-caption {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        padding: 0.5rem 0.75rem;
+        background: linear-gradient(180deg, transparent, rgba(5, 5, 7, 0.9));
+        color: #fff;
+        font-size: 0.72rem;
+        font-family: 'JetBrains Mono', monospace;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+    }
+
+    /* =====================================================
+       Destaques (Army deployment, medal, etc.)
+       ===================================================== */
+    .project-highlights {
+        margin-top: 1.5rem;
+        display: grid;
+        gap: 0.65rem;
+    }
+
+    .highlight-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.65rem;
+        padding: 0.7rem 1rem;
+        background: linear-gradient(135deg, rgba(245, 158, 11, 0.08), rgba(0, 212, 255, 0.05));
+        border: 1px solid rgba(245, 158, 11, 0.25);
+        border-radius: 14px;
+        font-size: 0.88rem;
+        color: var(--text-primary);
+        font-weight: 500;
+    }
+
+    .highlight-pill .pill-icon {
+        width: 28px;
+        height: 28px;
+        border-radius: 8px;
+        background: linear-gradient(135deg, #f59e0b, #ef4444);
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        color: #fff;
+        flex-shrink: 0;
+    }
+
+    /* Lightbox */
+    .lightbox {
+        position: fixed;
+        inset: 0;
+        background: rgba(5, 5, 7, 0.95);
+        backdrop-filter: blur(20px);
+        z-index: 1100;
+        display: none;
+        align-items: center;
+        justify-content: center;
+        padding: 4rem 2rem;
+        animation: fadeIn 0.3s ease-out;
+    }
+
+    .lightbox.is-open { display: flex; }
+
+    .lightbox img {
+        max-width: 100%;
+        max-height: 100%;
+        border-radius: 16px;
+        box-shadow: var(--shadow-lg);
+        animation: scaleIn 0.4s var(--ease-out);
+    }
+
+    .lightbox-close {
+        position: absolute;
+        top: 1.5rem;
+        right: 1.5rem;
+        width: 48px;
+        height: 48px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.1);
+        border: 1px solid var(--border-default);
+        color: #fff;
+        cursor: none;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.3s var(--ease-out);
+    }
+
+    .lightbox-close:hover {
+        background: rgba(0, 212, 255, 0.15);
+        border-color: var(--accent-1);
+        transform: rotate(90deg);
+    }
+
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    @keyframes scaleIn { from { transform: scale(0.92); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+
     @media (max-width: 900px) {
         .project,
         .project:nth-child(even) {
@@ -363,11 +496,11 @@
 
     <!-- Header -->
     <header class="projects-header" data-reveal>
-        <span class="eyebrow">Portfólio · 2023 — 2025</span>
-        <h1 class="title gradient-text">Projetos &amp; entregas</h1>
+        <span class="eyebrow">Portfólio · 2023 — 2026</span>
+        <h1 class="title gradient-text">Projetos API</h1>
         <p class="lead">
-            Cinco projetos acadêmicos com clientes reais. Cada um representa uma stack diferente, um papel
-            diferente e uma evolução real como desenvolvedor.
+            Seis semestres de Atividades Práticas Integradoras (API) com clientes reais. Cada projeto representa
+            uma stack diferente, um papel diferente e uma evolução real como desenvolvedor.
         </p>
     </header>
 
@@ -377,46 +510,49 @@
         <button class="filter-btn" data-filter="2023" data-cursor="hover">2023</button>
         <button class="filter-btn" data-filter="2024" data-cursor="hover">2024</button>
         <button class="filter-btn" data-filter="2025" data-cursor="hover">2025</button>
-        <button class="filter-btn" data-filter="frontend" data-cursor="hover">Frontend</button>
-        <button class="filter-btn" data-filter="backend" data-cursor="hover">Backend</button>
+        <button class="filter-btn" data-filter="2026" data-cursor="hover">2026</button>
         <button class="filter-btn" data-filter="po" data-cursor="hover">Product Owner</button>
+        <button class="filter-btn" data-filter="full" data-cursor="hover">Full Stack</button>
     </div>
 
     <!-- Lista -->
     <div class="projects-list" id="projects-list">
         {% for trabalho in trabalhos %}
-            {% set idx = loop.index0 %}
-            {%- set years = ['2023', '2024', '2024', '2025', '2025'] -%}
-            {%- set roles = ['Full Stack', 'Full Stack', 'Backend', 'Full Stack', 'Product Owner'] -%}
-            {%- set tags = [
-                '2023 backend',
-                '2024 frontend backend',
-                '2024 backend',
-                '2025 frontend backend',
-                '2025 po'
-            ] -%}
-            {% set year = years[idx] if idx < 5 else '2025' %}
-            {% set role = roles[idx] if idx < 5 else 'Full Stack' %}
-            {% set tag = tags[idx] if idx < 5 else '2025' %}
+        {% set is_wip = trabalho.get('em_andamento', False) %}
+        {% set role_filter = 'po' if 'Product Owner' in trabalho.papel else ('full' if 'Full' in trabalho.papel or 'Backend' in trabalho.papel else 'wip') %}
 
-        <article class="project" data-tags="{{ tag }}" data-reveal data-reveal-delay="{{ (idx % 3) + 1 }}">
+        <article class="project {% if is_wip %}is-wip{% endif %}" data-tags="{{ trabalho.ano }} {{ role_filter }}" data-reveal data-reveal-delay="{{ (loop.index0 % 3) + 1 }}">
             <div class="project-media">
-                <span class="project-year">{{ year }}</span>
-                <span class="project-role">{{ role }}</span>
-                <img src="{{ trabalho['imagem'] }}" alt="{{ trabalho['titulo'] }}">
+                <span class="project-year">{{ trabalho.ano }} · {{ trabalho.semestre }}</span>
+                <span class="project-role {% if is_wip %}is-wip{% endif %}">{{ trabalho.papel }}</span>
+                <img src="{{ url_for('static', filename=trabalho.imagem) }}" alt="{{ trabalho.titulo }}">
             </div>
 
             <div class="project-body">
-                <div class="project-meta">{{ year }} · {{ role }}</div>
-                <h2 class="project-title">{{ trabalho['titulo'] }}</h2>
-                <p class="project-summary">{{ trabalho['descricao'][:280] }}{% if trabalho['descricao']|length > 280 %}…{% endif %}</p>
+                <div class="project-meta">{{ trabalho.ano }} · {{ trabalho.papel }}</div>
+                <h2 class="project-title">{{ trabalho.titulo }}</h2>
+                <p class="project-summary">{{ trabalho.descricao[:280] }}{% if trabalho.descricao|length > 280 %}…{% endif %}</p>
 
                 <div class="project-tech">
-                    {% for tech in trabalho['tecno'].split(',') %}
+                    {% for tech in trabalho.tecno.split(',') %}
                     <span class="tech-tag">{{ tech.strip() }}</span>
                     {% endfor %}
                 </div>
 
+                {% if trabalho.destaques %}
+                <div class="project-highlights">
+                    {% for d in trabalho.destaques %}
+                    <span class="highlight-pill">
+                        <span class="pill-icon">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                        </span>
+                        {{ d }}
+                    </span>
+                    {% endfor %}
+                </div>
+                {% endif %}
+
+                {% if not is_wip %}
                 <button class="project-toggle" data-cursor="hover" type="button">
                     <span class="toggle-text">Ver detalhes completos</span>
                     <svg class="chev" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
@@ -427,23 +563,37 @@
                         <div class="detail-grid">
                             <div class="detail-block">
                                 <div class="detail-label">Descrição completa</div>
-                                <div class="detail-content">{{ trabalho['descricao'] }}</div>
+                                <div class="detail-content">{{ trabalho.descricao }}</div>
                             </div>
                             <div class="detail-block">
-                                <div class="detail-label">{{ trabalho['contribuicao'] }}</div>
-                                <div class="detail-content">{{ trabalho['cont'] }}</div>
+                                <div class="detail-label">{{ trabalho.contribuicao }}</div>
+                                <div class="detail-content">{{ trabalho.cont }}</div>
                             </div>
                             <div class="detail-block">
                                 <div class="detail-label">Hard skills</div>
-                                <div class="detail-content">{{ trabalho['hardD'] }}</div>
+                                <div class="detail-content">{{ trabalho.hardD }}</div>
                             </div>
                             <div class="detail-block">
                                 <div class="detail-label">Soft skills</div>
-                                <div class="detail-content">{{ trabalho['so'] }}</div>
+                                <div class="detail-content">{{ trabalho.so }}</div>
                             </div>
                         </div>
+
+                        {% if trabalho.galeria and trabalho.galeria|length > 1 %}
+                        <div class="project-gallery">
+                            <div class="gallery-label">Galeria</div>
+                            <div class="gallery-grid">
+                                {% for img in trabalho.galeria %}
+                                <div class="gallery-item" data-cursor="hover" data-lightbox="{{ url_for('static', filename=img) }}">
+                                    <img src="{{ url_for('static', filename=img) }}" alt="{{ trabalho.titulo }}">
+                                </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        {% endif %}
                     </div>
                 </div>
+                {% endif %}
             </div>
         </article>
         {% endfor %}
@@ -451,11 +601,18 @@
         <div class="empty-state">Nenhum projeto encontrado para este filtro.</div>
     </div>
 </div>
+
+<!-- Lightbox -->
+<div class="lightbox" id="lightbox" data-cursor="hover">
+    <button class="lightbox-close" id="lightbox-close" aria-label="Fechar" data-cursor="hover">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
+    <img id="lightbox-img" src="" alt="">
+</div>
 {% endblock %}
 
 {% block scripts_extra %}
 <script>
-    /* Toggle de detalhes */
     document.querySelectorAll('.project-toggle').forEach((btn) => {
         btn.addEventListener('click', () => {
             const card = btn.closest('.project');
@@ -464,7 +621,6 @@
         });
     });
 
-    /* Filtros */
     (function() {
         const buttons = document.querySelectorAll('.filter-btn');
         const list = document.getElementById('projects-list');
@@ -488,6 +644,30 @@
                 list.classList.toggle('is-empty', visible === 0);
             });
         });
+    })();
+
+    /* Lightbox para galeria */
+    (function() {
+        const lightbox = document.getElementById('lightbox');
+        const lbImg = document.getElementById('lightbox-img');
+        const lbClose = document.getElementById('lightbox-close');
+
+        document.querySelectorAll('[data-lightbox]').forEach(item => {
+            item.addEventListener('click', (e) => {
+                e.preventDefault();
+                lbImg.src = item.dataset.lightbox;
+                lightbox.classList.add('is-open');
+                document.body.style.overflow = 'hidden';
+            });
+        });
+
+        function close() {
+            lightbox.classList.remove('is-open');
+            document.body.style.overflow = '';
+        }
+        lbClose.addEventListener('click', close);
+        lightbox.addEventListener('click', (e) => { if (e.target === lightbox) close(); });
+        document.addEventListener('keydown', (e) => { if (e.key === 'Escape') close(); });
     })();
 </script>
 {% endblock %}

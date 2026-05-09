@@ -1,327 +1,493 @@
 {% extends 'base.html' %}
 
-{% block title %}
-    Trabalhos Realizados - Jonas Miguel
-{% endblock %}
+{% block title %}Projetos — Jonas Miguel Oliveira{% endblock %}
 
 {% block content %}
 <style>
-    /* Container principal */
-    .projects-container {
-        max-width: 1400px;
+    .projects-shell {
+        max-width: 1280px;
         margin: 0 auto;
-        padding: 40px 20px 80px;
+        padding: 2rem 1.5rem 4rem;
     }
 
-    /* Header da página */
+    /* =====================================================
+       Header
+       ===================================================== */
     .projects-header {
         text-align: center;
-        margin-bottom: 80px;
-        animation: fadeInUp 0.8s ease-out;
+        margin-bottom: 4rem;
     }
 
-    .projects-title {
-        font-size: clamp(2.5rem, 6vw, 4rem);
-        font-weight: 800;
-        margin-bottom: 20px;
-        background: linear-gradient(135deg, #00d4ff, #8b5cf6, #ec4899);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        background-clip: text;
+    .projects-header .title {
+        font-size: clamp(2.5rem, 6vw, 4.5rem);
+        font-weight: 700;
+        margin: 1.25rem 0 1rem;
+        font-family: 'Space Grotesk', sans-serif;
+        letter-spacing: -0.03em;
     }
 
-    .projects-subtitle {
-        font-size: clamp(1rem, 2vw, 1.2rem);
-        color: var(--text-secondary);
+    .projects-header .lead {
         max-width: 700px;
         margin: 0 auto;
+        color: var(--text-secondary);
+        font-size: clamp(1rem, 1.6vw, 1.15rem);
+        line-height: 1.7;
     }
 
-    /* Card de projeto */
-    .project-card {
-        background: rgba(255, 255, 255, 0.03);
-        backdrop-filter: blur(10px);
-        border: 1px solid rgba(255, 255, 255, 0.1);
-        border-radius: 30px;
-        padding: 0;
-        margin-bottom: 60px;
-        overflow: hidden;
-        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-        opacity: 0;
-        animation: fadeInUp 0.8s ease-out forwards;
+    /* =====================================================
+       Filters
+       ===================================================== */
+    .filter-bar {
+        display: flex;
+        justify-content: center;
+        gap: 0.5rem;
+        flex-wrap: wrap;
+        margin-bottom: 4rem;
+        padding: 0.5rem;
+        max-width: max-content;
+        margin-left: auto;
+        margin-right: auto;
+        background: var(--bg-card);
+        border: 1px solid var(--border-default);
+        border-radius: 100px;
+        backdrop-filter: blur(12px);
     }
 
-    .project-card:hover {
-        background: rgba(255, 255, 255, 0.05);
-        border-color: rgba(0, 212, 255, 0.3);
-        transform: translateY(-10px);
-        box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5);
+    .filter-btn {
+        padding: 0.55rem 1.2rem;
+        font-size: 0.85rem;
+        font-weight: 500;
+        color: var(--text-secondary);
+        background: transparent;
+        border: none;
+        border-radius: 100px;
+        cursor: none;
+        transition: all 0.3s var(--ease-out);
+        font-family: 'Inter', sans-serif;
     }
 
-    /* Imagem do projeto */
-    .project-image-wrapper {
+    .filter-btn:hover { color: var(--text-primary); }
+
+    .filter-btn.is-active {
+        background: var(--gradient-cool);
+        color: #fff;
+        box-shadow: 0 6px 16px rgba(0, 212, 255, 0.3);
+    }
+
+    /* =====================================================
+       Project list
+       ===================================================== */
+    .projects-list {
+        display: flex;
+        flex-direction: column;
+        gap: 4rem;
+    }
+
+    .project {
+        display: grid;
+        grid-template-columns: 1.1fr 1fr;
+        gap: 3rem;
+        align-items: center;
+        padding: 2rem;
+        border-radius: 28px;
+        background: var(--bg-card);
+        border: 1px solid var(--border-default);
+        transition: all 0.5s var(--ease-out);
+    }
+
+    .project:hover {
+        background: var(--bg-card-hover);
+        border-color: rgba(0, 212, 255, 0.18);
+        transform: translateY(-4px);
+        box-shadow: var(--shadow-md);
+    }
+
+    .project:nth-child(even) {
+        grid-template-columns: 1fr 1.1fr;
+    }
+
+    .project:nth-child(even) .project-media { order: 2; }
+
+    /* Media */
+    .project-media {
         position: relative;
-        width: 100%;
-        height: 400px;
+        aspect-ratio: 4 / 3;
+        border-radius: 20px;
         overflow: hidden;
-        border-radius: 30px 30px 0 0;
+        background: linear-gradient(135deg, rgba(0, 212, 255, 0.05), rgba(139, 92, 246, 0.05));
+        border: 1px solid var(--border-default);
     }
 
-    .project-image {
+    .project-media img {
         width: 100%;
         height: 100%;
         object-fit: cover;
-        transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-        filter: brightness(0.8);
+        transition: transform 0.7s var(--ease-out);
+        filter: brightness(0.85) saturate(1.05);
     }
 
-    .project-card:hover .project-image {
-        transform: scale(1.1);
-        filter: brightness(1);
+    .project:hover .project-media img {
+        transform: scale(1.05);
+        filter: brightness(1) saturate(1.1);
     }
 
-    .project-image-wrapper::after {
+    .project-media::after {
         content: '';
         position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background: linear-gradient(180deg, transparent 0%, rgba(10, 10, 10, 0.8) 100%);
+        inset: 0;
+        background: linear-gradient(135deg, transparent 60%, rgba(0, 212, 255, 0.08) 100%);
         pointer-events: none;
+        opacity: 0;
+        transition: opacity 0.4s ease;
     }
 
-    /* Conteúdo do projeto */
-    .project-content {
-        padding: 40px;
+    .project:hover .project-media::after { opacity: 1; }
+
+    .project-year {
+        position: absolute;
+        top: 1rem;
+        left: 1rem;
+        z-index: 2;
+        padding: 0.4rem 0.85rem;
+        background: rgba(12, 12, 16, 0.85);
+        backdrop-filter: blur(12px);
+        border: 1px solid var(--border-default);
+        border-radius: 100px;
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 0.78rem;
+        letter-spacing: 0.06em;
+        color: var(--text-primary);
+    }
+
+    .project-role {
+        position: absolute;
+        top: 1rem;
+        right: 1rem;
+        z-index: 2;
+        padding: 0.4rem 0.85rem;
+        background: var(--gradient-cool);
+        border-radius: 100px;
+        font-size: 0.78rem;
+        color: #fff;
+        font-weight: 600;
+        box-shadow: 0 4px 12px rgba(0, 212, 255, 0.3);
+    }
+
+    /* Content */
+    .project-body { padding: 0.5rem 0; }
+
+    .project-meta {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 0.78rem;
+        color: var(--accent-1);
+        text-transform: uppercase;
+        letter-spacing: 0.12em;
+        margin-bottom: 1rem;
+    }
+
+    .project-meta::before {
+        content: '';
+        width: 24px;
+        height: 1px;
+        background: var(--accent-1);
     }
 
     .project-title {
-        font-size: clamp(1.8rem, 4vw, 2.5rem);
+        font-family: 'Space Grotesk', sans-serif;
+        font-size: clamp(1.4rem, 2.5vw, 1.85rem);
         font-weight: 700;
-        color: var(--text-primary);
-        margin-bottom: 15px;
-        position: relative;
-        display: inline-block;
+        margin-bottom: 1rem;
+        line-height: 1.2;
     }
 
-    .project-title::after {
-        content: '';
-        position: absolute;
-        bottom: -8px;
-        left: 0;
-        width: 80px;
-        height: 4px;
-        background: linear-gradient(90deg, var(--accent-1), var(--accent-2));
-        border-radius: 2px;
-    }
-
-    .project-description {
-        font-size: 1.1rem;
+    .project-summary {
         color: var(--text-secondary);
-        line-height: 1.8;
-        margin-bottom: 30px;
+        font-size: 0.98rem;
+        line-height: 1.75;
+        margin-bottom: 1.5rem;
     }
 
-    /* Grid de informações */
-    .project-info-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-        gap: 30px;
-        margin-top: 30px;
-    }
-
-    .info-block {
-        background: rgba(255, 255, 255, 0.02);
-        border: 1px solid rgba(255, 255, 255, 0.05);
-        border-radius: 15px;
-        padding: 20px;
-        transition: all 0.3s ease;
-    }
-
-    .info-block:hover {
-        background: rgba(255, 255, 255, 0.04);
-        border-color: rgba(0, 212, 255, 0.2);
-        transform: translateY(-3px);
-    }
-
-    .info-label {
-        font-size: 0.85rem;
-        font-weight: 600;
-        text-transform: uppercase;
-        letter-spacing: 1px;
-        color: var(--accent-1);
-        margin-bottom: 10px;
-        display: flex;
-        align-items: center;
-        gap: 8px;
-    }
-
-    .info-label::before {
-        content: '';
-        width: 6px;
-        height: 6px;
-        background: var(--accent-1);
-        border-radius: 50%;
-        display: inline-block;
-    }
-
-    .info-content {
-        font-size: 1rem;
-        color: var(--text-secondary);
-        line-height: 1.6;
-    }
-
-    /* Tags de tecnologias */
-    .tech-tags {
+    .project-tech {
         display: flex;
         flex-wrap: wrap;
-        gap: 10px;
-        margin-top: 10px;
+        gap: 0.4rem;
+        margin-bottom: 1.5rem;
     }
 
     .tech-tag {
-        padding: 8px 16px;
-        background: rgba(0, 212, 255, 0.1);
+        padding: 0.35rem 0.75rem;
+        font-size: 0.78rem;
+        font-family: 'JetBrains Mono', monospace;
         color: var(--accent-1);
-        border: 1px solid rgba(0, 212, 255, 0.3);
-        border-radius: 20px;
-        font-size: 0.85rem;
-        font-weight: 500;
+        background: rgba(0, 212, 255, 0.06);
+        border: 1px solid rgba(0, 212, 255, 0.2);
+        border-radius: 100px;
         transition: all 0.3s ease;
     }
 
     .tech-tag:hover {
-        background: rgba(0, 212, 255, 0.2);
-        border-color: var(--accent-1);
+        background: rgba(0, 212, 255, 0.12);
         transform: translateY(-2px);
     }
 
-    /* Divider entre projetos */
-    .project-divider {
-        height: 2px;
-        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
-        margin: 80px 0;
-    }
-
-    /* Animações em delay */
-    .project-card:nth-child(1) { animation-delay: 0.1s; }
-    .project-card:nth-child(2) { animation-delay: 0.2s; }
-    .project-card:nth-child(3) { animation-delay: 0.3s; }
-    .project-card:nth-child(4) { animation-delay: 0.4s; }
-    .project-card:nth-child(5) { animation-delay: 0.5s; }
-
-    /* Responsive */
-    @media (max-width: 768px) {
-        .project-content {
-            padding: 30px 20px;
-        }
-
-        .project-image-wrapper {
-            height: 250px;
-        }
-
-        .project-info-grid {
-            grid-template-columns: 1fr;
-            gap: 20px;
-        }
-    }
-
-    /* Badge de destaque */
-    .featured-badge {
-        position: absolute;
-        top: 20px;
-        right: 20px;
-        background: linear-gradient(135deg, var(--accent-1), var(--accent-2));
-        color: white;
-        padding: 8px 20px;
-        border-radius: 20px;
+    /* Expandable details */
+    .project-toggle {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.65rem 1.1rem;
         font-size: 0.85rem;
         font-weight: 600;
-        z-index: 10;
-        box-shadow: 0 5px 15px rgba(0, 212, 255, 0.4);
+        background: transparent;
+        border: 1px solid var(--border-strong);
+        border-radius: 100px;
+        color: var(--text-primary);
+        cursor: none;
+        transition: all 0.3s var(--ease-out);
+        font-family: 'Inter', sans-serif;
+    }
+
+    .project-toggle:hover {
+        border-color: var(--accent-1);
+        background: rgba(0, 212, 255, 0.06);
+        color: var(--accent-1);
+    }
+
+    .project-toggle .chev {
+        transition: transform 0.3s var(--ease-out);
+    }
+
+    .project.is-expanded .project-toggle .chev {
+        transform: rotate(180deg);
+    }
+
+    .project-details {
+        display: grid;
+        grid-template-rows: 0fr;
+        transition: grid-template-rows 0.5s var(--ease-out);
+        margin-top: 0;
+    }
+
+    .project.is-expanded .project-details {
+        grid-template-rows: 1fr;
+        margin-top: 1.5rem;
+    }
+
+    .project-details-inner {
+        overflow: hidden;
+    }
+
+    .detail-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1rem;
+        padding-top: 1.5rem;
+        border-top: 1px solid var(--border-default);
+    }
+
+    .detail-block {
+        background: rgba(255, 255, 255, 0.02);
+        border: 1px solid var(--border-subtle);
+        border-radius: 16px;
+        padding: 1.25rem;
+        transition: all 0.3s ease;
+    }
+
+    .detail-block:hover {
+        border-color: rgba(0, 212, 255, 0.18);
+        background: rgba(255, 255, 255, 0.035);
+    }
+
+    .detail-label {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.12em;
+        color: var(--accent-1);
+        margin-bottom: 0.75rem;
+    }
+
+    .detail-label::before {
+        content: '';
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: var(--accent-1);
+        box-shadow: 0 0 8px var(--accent-glow);
+    }
+
+    .detail-content {
+        color: var(--text-secondary);
+        font-size: 0.9rem;
+        line-height: 1.7;
+    }
+
+    /* =====================================================
+       Empty state
+       ===================================================== */
+    .empty-state {
+        text-align: center;
+        padding: 3rem 1rem;
+        color: var(--text-tertiary);
+        font-family: 'JetBrains Mono', monospace;
+        display: none;
+    }
+
+    .projects-list.is-empty .empty-state { display: block; }
+
+    /* =====================================================
+       Responsive
+       ===================================================== */
+    @media (max-width: 900px) {
+        .project,
+        .project:nth-child(even) {
+            grid-template-columns: 1fr;
+            gap: 1.5rem;
+        }
+        .project:nth-child(even) .project-media { order: 0; }
+        .detail-grid { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 500px) {
+        .project { padding: 1rem; }
     }
 </style>
 
-<div class="projects-container">
+<div class="projects-shell">
+
     <!-- Header -->
-    <div class="projects-header">
-        <h1 class="projects-title">Meus Trabalhos</h1>
-        <p class="projects-subtitle">
-            Projetos desenvolvidos ao longo da minha jornada acadêmica e profissional, 
-            transformando ideias em soluções funcionais
+    <header class="projects-header" data-reveal>
+        <span class="eyebrow">Portfólio · 2023 — 2025</span>
+        <h1 class="title gradient-text">Projetos &amp; entregas</h1>
+        <p class="lead">
+            Cinco projetos acadêmicos com clientes reais. Cada um representa uma stack diferente, um papel
+            diferente e uma evolução real como desenvolvedor.
         </p>
+    </header>
+
+    <!-- Filtros -->
+    <div class="filter-bar" data-reveal>
+        <button class="filter-btn is-active" data-filter="all" data-cursor="hover">Todos</button>
+        <button class="filter-btn" data-filter="2023" data-cursor="hover">2023</button>
+        <button class="filter-btn" data-filter="2024" data-cursor="hover">2024</button>
+        <button class="filter-btn" data-filter="2025" data-cursor="hover">2025</button>
+        <button class="filter-btn" data-filter="frontend" data-cursor="hover">Frontend</button>
+        <button class="filter-btn" data-filter="backend" data-cursor="hover">Backend</button>
+        <button class="filter-btn" data-filter="po" data-cursor="hover">Product Owner</button>
     </div>
 
-    <!-- Projetos -->
-    {% for trabalho in trabalhos %}
-    <div class="project-card">
-        <div class="project-image-wrapper">
-            {% if loop.first %}
-            <div class="featured-badge">✨ Destaque</div>
-            {% endif %}
-            <img src="{{ trabalho['imagem'] }}" alt="{{ trabalho['titulo'] }}" class="project-image">
-        </div>
-        
-        <div class="project-content">
-            <h3 class="project-title">{{ trabalho['titulo'] }}</h3>
-            <p class="project-description">{{ trabalho['descricao'] }}</p>
-            
-            <div class="project-info-grid">
-                <div class="info-block">
-                    <div class="info-label">Tecnologias</div>
-                    <div class="tech-tags">
-                        {% for tech in trabalho['tecno'].split(',') %}
-                        <span class="tech-tag">{{ tech.strip() }}</span>
-                        {% endfor %}
+    <!-- Lista -->
+    <div class="projects-list" id="projects-list">
+        {% for trabalho in trabalhos %}
+            {% set idx = loop.index0 %}
+            {%- set years = ['2023', '2024', '2024', '2025', '2025'] -%}
+            {%- set roles = ['Full Stack', 'Full Stack', 'Backend', 'Full Stack', 'Product Owner'] -%}
+            {%- set tags = [
+                '2023 backend',
+                '2024 frontend backend',
+                '2024 backend',
+                '2025 frontend backend',
+                '2025 po'
+            ] -%}
+            {% set year = years[idx] if idx < 5 else '2025' %}
+            {% set role = roles[idx] if idx < 5 else 'Full Stack' %}
+            {% set tag = tags[idx] if idx < 5 else '2025' %}
+
+        <article class="project" data-tags="{{ tag }}" data-reveal data-reveal-delay="{{ (idx % 3) + 1 }}">
+            <div class="project-media">
+                <span class="project-year">{{ year }}</span>
+                <span class="project-role">{{ role }}</span>
+                <img src="{{ trabalho['imagem'] }}" alt="{{ trabalho['titulo'] }}">
+            </div>
+
+            <div class="project-body">
+                <div class="project-meta">{{ year }} · {{ role }}</div>
+                <h2 class="project-title">{{ trabalho['titulo'] }}</h2>
+                <p class="project-summary">{{ trabalho['descricao'][:280] }}{% if trabalho['descricao']|length > 280 %}…{% endif %}</p>
+
+                <div class="project-tech">
+                    {% for tech in trabalho['tecno'].split(',') %}
+                    <span class="tech-tag">{{ tech.strip() }}</span>
+                    {% endfor %}
+                </div>
+
+                <button class="project-toggle" data-cursor="hover" type="button">
+                    <span class="toggle-text">Ver detalhes completos</span>
+                    <svg class="chev" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+                </button>
+
+                <div class="project-details">
+                    <div class="project-details-inner">
+                        <div class="detail-grid">
+                            <div class="detail-block">
+                                <div class="detail-label">Descrição completa</div>
+                                <div class="detail-content">{{ trabalho['descricao'] }}</div>
+                            </div>
+                            <div class="detail-block">
+                                <div class="detail-label">{{ trabalho['contribuicao'] }}</div>
+                                <div class="detail-content">{{ trabalho['cont'] }}</div>
+                            </div>
+                            <div class="detail-block">
+                                <div class="detail-label">Hard skills</div>
+                                <div class="detail-content">{{ trabalho['hardD'] }}</div>
+                            </div>
+                            <div class="detail-block">
+                                <div class="detail-label">Soft skills</div>
+                                <div class="detail-content">{{ trabalho['so'] }}</div>
+                            </div>
+                        </div>
                     </div>
                 </div>
-                
-                <div class="info-block">
-                    <div class="info-label">{{ trabalho['contribuicao'] }}</div>
-                    <div class="info-content">{{ trabalho['cont'] }}</div>
-                </div>
-                
-                <div class="info-block">
-                    <div class="info-label">Hard Skills</div>
-                    <div class="info-content">{{ trabalho['hardD'] }}</div>
-                </div>
-                
-                <div class="info-block">
-                    <div class="info-label">Soft Skills</div>
-                    <div class="info-content">{{ trabalho['so'] }}</div>
-                </div>
             </div>
-        </div>
+        </article>
+        {% endfor %}
+
+        <div class="empty-state">Nenhum projeto encontrado para este filtro.</div>
     </div>
-    
-    {% if not loop.last %}
-    <div class="project-divider"></div>
-    {% endif %}
-    {% endfor %}
 </div>
+{% endblock %}
 
+{% block scripts_extra %}
 <script>
-    // Adicionar animação de scroll reveal
-    const projectCards = document.querySelectorAll('.project-card');
-    
-    const observerOptions = {
-        threshold: 0.1,
-        rootMargin: '0px 0px -50px 0px'
-    };
-    
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.style.opacity = '1';
-                entry.target.style.transform = 'translateY(0)';
-            }
+    /* Toggle de detalhes */
+    document.querySelectorAll('.project-toggle').forEach((btn) => {
+        btn.addEventListener('click', () => {
+            const card = btn.closest('.project');
+            const expanded = card.classList.toggle('is-expanded');
+            btn.querySelector('.toggle-text').textContent = expanded ? 'Recolher detalhes' : 'Ver detalhes completos';
         });
-    }, observerOptions);
-    
-    projectCards.forEach(card => {
-        observer.observe(card);
     });
-</script>
 
+    /* Filtros */
+    (function() {
+        const buttons = document.querySelectorAll('.filter-btn');
+        const list = document.getElementById('projects-list');
+        const projects = list.querySelectorAll('.project');
+
+        buttons.forEach(btn => {
+            btn.addEventListener('click', () => {
+                buttons.forEach(b => b.classList.remove('is-active'));
+                btn.classList.add('is-active');
+
+                const filter = btn.dataset.filter;
+                let visible = 0;
+
+                projects.forEach(p => {
+                    const tags = p.dataset.tags || '';
+                    const match = filter === 'all' || tags.includes(filter);
+                    p.style.display = match ? '' : 'none';
+                    if (match) visible++;
+                });
+
+                list.classList.toggle('is-empty', visible === 0);
+            });
+        });
+    })();
+</script>
 {% endblock %}
